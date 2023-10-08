@@ -1,3 +1,3 @@
-## Hotel REST Exercise
+## Hotel REST Exercise - Rest Assured Test version
 
-![img.png](img.png)
+Denne opgave er en del af et større projekt, som du kan finde her: [Hotel REST Exercise](https://github.com/dat3Cph/backend/blob/main/flow3/2_security/Exercise_MonTue_HotelTest.md)
