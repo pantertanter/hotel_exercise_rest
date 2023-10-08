@@ -7,10 +7,9 @@ import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.*;
 
-class HotelControllerTest {
+class RoomControllerTest {
 
     private static Javalin app;
     private static EntityManagerFactory emfTest;
@@ -41,29 +40,24 @@ class HotelControllerTest {
 
     @Test
     void read() {
+        // given
+
+        // when
+
+        // then
     }
 
     @Test
-    @DisplayName("Read all hotels")
     void readAll() {
         // given
-        int listSize = 2;
 
         // when
-        given()
-                .contentType("application/json")
-                .when()
-                .get(BASE_URL + "/hotels")
-                .then()
-                .assertThat()
-                .statusCode(200)
-                // then
-                .body("size()", equalTo(listSize));
+
+        // then
     }
 
     @Test
     void create() {
-
         // given
 
         // when
@@ -73,7 +67,6 @@ class HotelControllerTest {
 
     @Test
     void update() {
-
         // given
 
         // when
@@ -83,7 +76,6 @@ class HotelControllerTest {
 
     @Test
     void delete() {
-
         // given
 
         // when
@@ -93,7 +85,6 @@ class HotelControllerTest {
 
     @Test
     void validatePrimaryKey() {
-
         // given
 
         // when
@@ -103,7 +94,6 @@ class HotelControllerTest {
 
     @Test
     void validateEntity() {
-
         // given
 
         // when
