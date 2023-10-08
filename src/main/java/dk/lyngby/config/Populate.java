@@ -12,7 +12,11 @@ import java.util.Set;
 public class Populate {
     public static void main(String[] args) {
 
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig();
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+        populateData(emf);
+    }
+
+    public static void populateData(EntityManagerFactory emf) {
 
         Set<Room> calRooms = getCalRooms();
         Set<Room> hilRooms = getHilRooms();
