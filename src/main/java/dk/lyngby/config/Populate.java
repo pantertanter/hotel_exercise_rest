@@ -23,6 +23,10 @@ public class Populate {
 
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
+
+            em.createNamedQuery("Room.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Hotel.deleteAllRows").executeUpdate();
+
             Hotel california = new Hotel("Hotel California", "California", Hotel.HotelType.LUXURY);
             Hotel hilton = new Hotel("Hilton", "Copenhagen", Hotel.HotelType.STANDARD);
             california.setRooms(calRooms);

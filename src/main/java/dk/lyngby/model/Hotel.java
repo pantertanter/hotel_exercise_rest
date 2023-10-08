@@ -14,6 +14,9 @@ import java.util.Set;
 @Entity
 @ToString
 @Table(name = "hotel")
+@NamedQueries({
+        @NamedQuery(name = "Hotel.deleteAllRows", query = "DELETE from Hotel"),
+})
 public class Hotel {
 
     @Id
