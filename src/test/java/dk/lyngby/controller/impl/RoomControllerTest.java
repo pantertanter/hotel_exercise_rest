@@ -7,6 +7,8 @@ import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
 
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RoomControllerTest {
@@ -50,10 +52,18 @@ class RoomControllerTest {
     @Test
     void readAll() {
         // given
+        int listSize = 12;
 
         // when
-
-        // then
+        given()
+                .contentType("application/json")
+                .when()
+                .get(BASE_URL + "/rooms")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                // then
+                .body("size()", equalTo(listSize));
     }
 
     @Test
