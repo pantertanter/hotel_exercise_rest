@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Getter
+
 @NoArgsConstructor
 @Entity
-@ToString
 @Table(name = "hotel")
 public class Hotel {
 
@@ -21,6 +22,7 @@ public class Hotel {
     @Column(name = "hotel_id", nullable = false, unique = true)
     private Integer id;
 
+    @Setter
     @Column(name = "hotel_name", nullable = false, unique = true)
     private String hotelName;
 
@@ -28,12 +30,13 @@ public class Hotel {
     @Column(name = "hotel_address", nullable = false)
     private String hotelAddress;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "hotel_type", nullable = false)
     private HotelType hotelType;
 
-    @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    private Set<Room> rooms;
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Room> rooms = new HashSet<>();
 
     public Hotel(String hotelName, String hotelAddress, HotelType hotelType) {
         this.hotelName = hotelName;

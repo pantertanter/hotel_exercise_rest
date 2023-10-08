@@ -15,7 +15,7 @@ public class HotelController implements IController<Hotel, Integer> {
     private final HotelDao dao;
 
     public HotelController() {
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig();
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
         this.dao = HotelDao.getInstance(emf);
     }
 
@@ -46,7 +46,8 @@ public class HotelController implements IController<Hotel, Integer> {
     @Override
     public void create(Context ctx) {
         // request
-        Hotel jsonRequest = validateEntity(ctx);
+        //Hotel jsonRequest = validateEntity(ctx);
+        Hotel jsonRequest = ctx.bodyAsClass(Hotel.class);
         // entity
         Hotel hotel = dao.create(jsonRequest);
         // dto

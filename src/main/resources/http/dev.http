@@ -44,7 +44,7 @@ GET {{url}}/rooms/1
 
 ###
 
-POST {{url}}/rooms/hotel/9
+POST {{url}}/rooms/hotel/3
 Content-Type: application/json
 
 {

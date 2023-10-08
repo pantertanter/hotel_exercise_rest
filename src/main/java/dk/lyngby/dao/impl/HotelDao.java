@@ -1,5 +1,6 @@
 package dk.lyngby.dao.impl;
 
+import dk.lyngby.dto.HotelDto;
 import dk.lyngby.model.Hotel;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.NoArgsConstructor;
@@ -54,8 +55,9 @@ public class HotelDao implements dk.lyngby.dao.IDao<Hotel, Integer> {
             em.getTransaction().begin();
 
             var h = em.find(Hotel.class, integer);
+            h.setHotelName(hotel.getHotelName());
             h.setHotelAddress(hotel.getHotelAddress());
-
+            h.setHotelType(hotel.getHotelType());
             Hotel merge = em.merge(h);
             em.getTransaction().commit();
             return merge;
