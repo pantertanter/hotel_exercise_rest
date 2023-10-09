@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -35,8 +36,9 @@ public class Hotel {
     @Column(name = "hotel_type", nullable = false)
     private HotelType hotelType;
 
-    @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    private Set<Room> rooms;
+    @ToString.Exclude
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private Set<Room> rooms = new HashSet<>();
 
     public Hotel(String hotelName, String hotelAddress, HotelType hotelType) {
         this.hotelName = hotelName;
@@ -45,7 +47,7 @@ public class Hotel {
     }
 
     public void setRooms(Set<Room> rooms) {
-        if(rooms != null) {
+        if (rooms != null) {
             this.rooms = rooms;
             for (Room room : rooms) {
                 room.setHotel(this);
@@ -54,7 +56,7 @@ public class Hotel {
     }
 
     public void addRoom(Room room) {
-        if ( room != null) {
+        if (room != null) {
             this.rooms.add(room);
             room.setHotel(this);
         }

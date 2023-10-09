@@ -3,12 +3,16 @@ package dk.lyngby.controller.impl;
 import dk.lyngby.config.ApplicationConfig;
 import dk.lyngby.config.HibernateConfig;
 import dk.lyngby.config.Populate;
+import dk.lyngby.dto.HotelDto;
+import dk.lyngby.model.Hotel;
 import io.javalin.Javalin;
+import io.javalin.http.ContentType;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class HotelControllerTest {
 
@@ -17,8 +21,7 @@ class HotelControllerTest {
     private static final String BASE_URL = "http://localhost:7777/api/v1";
 
     @BeforeAll
-    static void beforeAll()
-    {
+    static void beforeAll() {
         // Setup test database
         HibernateConfig.setTest(true);
         emfTest = HibernateConfig.getEntityManagerFactory();
@@ -62,33 +65,78 @@ class HotelControllerTest {
     }
 
     @Test
+    @DisplayName("Create new hotel without rooms")
     void create() {
 
         // given
+        Hotel h3 = new Hotel("Cab-inn", "Østergade 2", Hotel.HotelType.BUDGET);
+        int hotelId = 3;
 
         // when
+        HotelDto hotel =
+                given()
+                        .contentType(ContentType.JSON)
+                        .body(h3)
+                        .when()
+                        .post(BASE_URL + "/hotels")
+                        .then()
+                        .statusCode(201)
+                        .body("id", equalTo(hotelId))
+                        .body("hotelName", equalTo("Cab-inn"))
+                        .body("hotelAddress", equalTo("Østergade 2"))
+                        .body("rooms", hasSize(0))
+                        .extract().body().as(HotelDto.class);
 
         // then
+        assertEquals(hotel.getHotelName(), h3.getHotelName());
     }
 
     @Test
+    @DisplayName("Update hotel address by id")
     void update() {
 
         // given
+        Hotel update = new Hotel("Hotel California", "California Boulevard", Hotel.HotelType.LUXURY);
 
         // when
+        HotelDto updHotel =
+        given()
+                .contentType("application/json")
+                .body(update)
+                .when()
+                .put(BASE_URL + "/hotels/1")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .extract().body().as(HotelDto.class);
 
         // then
+        assertEquals(updHotel.getHotelAddress(), update.getHotelAddress());
     }
 
     @Test
     void delete() {
 
         // given
+        int hotelId = 2;
 
         // when
+        given()
+                .contentType("application/json")
+                .when()
+                .delete(BASE_URL + "/hotels/" + hotelId)
+                .then()
+                .assertThat()
+                .statusCode(204);
 
         // then
+        given()
+                .contentType("application/json")
+                .when()
+                .get(BASE_URL + "/hotels/" + hotelId)
+                .then()
+                .assertThat()
+                .statusCode(404);
     }
 
     @Test

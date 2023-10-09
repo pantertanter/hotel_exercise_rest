@@ -12,25 +12,25 @@ POST {{url}}/hotels
 Content-Type: application/json
 
 {
-  "hotelName": "Holiday Inn",
-  "hotelAddress": "Stuttgart",
+  "hotelName": "Scandic",
+  "hotelAddress": "Lyngby",
   "hotelType": "STANDARD"
 }
 
 ###
 
-PUT {{url}}/hotels/4
+PUT {{url}}/hotels/200
 Content-Type: application/json
 
 {
-  "hotelName": "Ritz Carlton",
-  "hotelAddress": "London City",
-  "hotelType": "LUXURY"
+  "hotelName": "Scandic",
+  "hotelAddress": "Lyngby Hovedgade",
+  "hotelType": "BUDGET"
 }
 
 ###
 
-DELETE {{url}}/hotels/5
+DELETE {{url}}/hotels/200
 
 ###
 
@@ -40,7 +40,7 @@ GET {{url}}/rooms
 
 ###
 
-GET {{url}}/rooms/1
+GET {{url}}/rooms/100
 
 ###
 
