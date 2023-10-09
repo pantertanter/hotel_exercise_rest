@@ -2,6 +2,7 @@ package dk.lyngby.controller.impl;
 
 import dk.lyngby.exception.ApiException;
 import dk.lyngby.exception.Message;
+import dk.lyngby.exception.ValidationMessage;
 import dk.lyngby.routes.Routes;
 import io.javalin.http.Context;
 import io.javalin.validation.ValidationError;
@@ -10,18 +11,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Map;
 
 public class ExceptionController {
     private final Logger LOGGER = LoggerFactory.getLogger(Routes.class);
 
     public void validationExceptionHandler(ValidationException e , Context ctx) {
         LOGGER.error(ctx.attribute("requestInfo") + " " + ctx.res().getStatus() + " " + ctx.body());
-        ctx.status(404);
+
         List<ValidationError<Object>> errors = e.getErrors().get("id");
-        System.out.println(errors.get(0).getMessage());
-        System.out.println(errors.get(0).getArgs());
-        System.out.println(errors.get(0).getValue());
-        ctx.json(e.getErrors());
+        String message = errors.get(0).getMessage();
+        Map<String, Object> args = errors.get(0).getArgs();
+        Object value = errors.get(0).getValue();
+
+        ctx.status(404);
+        ctx.json(new ValidationMessage(message, args, value));
     }
 
     public void apiExceptionHandler(ApiException e, Context ctx) {

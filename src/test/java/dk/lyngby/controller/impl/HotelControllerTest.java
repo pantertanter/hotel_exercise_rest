@@ -4,15 +4,19 @@ import dk.lyngby.config.ApplicationConfig;
 import dk.lyngby.config.HibernateConfig;
 import dk.lyngby.config.Populate;
 import dk.lyngby.dto.HotelDto;
+import dk.lyngby.exception.ValidationMessage;
 import dk.lyngby.model.Hotel;
 import io.javalin.Javalin;
 import io.javalin.http.ContentType;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
 
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.LinkedHashMap;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HotelControllerTest {
 
@@ -140,13 +144,28 @@ class HotelControllerTest {
     }
 
     @Test
-    void validatePrimaryKey() {
+    @DisplayName("Call the delete method with a non-existing id")
+    void delteWithWNonExistingId() {
 
         // given
+        int hotelId = 200;
 
         // when
+        ValidationMessage error =
+        given()
+                .contentType("application/json")
+                .when()
+                .delete(BASE_URL + "/hotels/" + hotelId)
+                .then()
+                .assertThat()
+                .statusCode(404)
+                .extract().body().as(ValidationMessage.class);
 
         // then
+        assertEquals(error.message(), "Not a valid id");
+        assertEquals(error.value(), hotelId);
+        assertEquals(error.args(), new LinkedHashMap<>());
+
     }
 
     @Test
