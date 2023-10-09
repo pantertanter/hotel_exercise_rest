@@ -33,6 +33,7 @@ public class Hotel {
     private String hotelAddress;
 
     @Enumerated(EnumType.STRING)
+    @Setter
     @Column(name = "hotel_type", nullable = false)
     private HotelType hotelType;
 
@@ -76,6 +77,8 @@ public class Hotel {
     }
 
     public enum HotelType {
-        BUDGET, STANDARD, LUXURY
+        BUDGET,
+        STANDARD,
+        LUXURY
     }
 }

@@ -4,6 +4,7 @@ import dk.lyngby.config.ApplicationConfig;
 import dk.lyngby.config.HibernateConfig;
 import dk.lyngby.config.Populate;
 import dk.lyngby.dto.HotelDto;
+import dk.lyngby.exception.Message;
 import dk.lyngby.exception.ValidationMessage;
 import dk.lyngby.model.Hotel;
 import io.javalin.Javalin;
@@ -14,9 +15,8 @@ import org.junit.jupiter.api.*;
 import java.util.LinkedHashMap;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class HotelControllerTest {
 
@@ -26,6 +26,7 @@ class HotelControllerTest {
 
     @BeforeAll
     static void beforeAll() {
+
         // Setup test database
         HibernateConfig.setTest(true);
         emfTest = HibernateConfig.getEntityManagerFactory();
@@ -42,12 +43,32 @@ class HotelControllerTest {
 
     @AfterAll
     static void tearDown() {
+        System.out.println("Tear down HotelControllerTest");
         HibernateConfig.setTest(false);
         ApplicationConfig.stopServer(app);
     }
 
     @Test
+    @DisplayName("Read hotel by id")
     void read() {
+
+        // given
+        int hotelId = 1;
+
+        // when
+        given()
+                .contentType("application/json")
+                .when()
+                .get(BASE_URL + "/hotels/" + hotelId)
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("id", equalTo(hotelId))
+                .body("hotelName", equalTo("Hotel California"))
+                .body("hotelAddress", equalTo("California"))
+                .body("rooms", hasSize(6));
+
+        // then
     }
 
     @Test
@@ -96,6 +117,49 @@ class HotelControllerTest {
     }
 
     @Test
+    void getValidateEntityExceptionWhenCreatingHotel() {
+
+        // given
+        String jsonHotelWithoutName = "{\"hotelAddress\":\"Østergade 2\",\"hotelType\":\"BUDGET\"}";
+
+        // when
+        ValidationMessage error =
+        given()
+                .contentType(ContentType.JSON)
+                .body(jsonHotelWithoutName)
+                .when()
+                .post(BASE_URL + "/hotels")
+                .then()
+                .statusCode(400)
+                .extract().body().as(ValidationMessage.class);
+
+        // then
+        assertEquals(error.message(), "Hotel name must be set");
+    }
+
+    @Test
+    void getConstraintViolationExceptionWhenCreatingHotel() {
+
+        // given
+        Hotel hilton = new Hotel("Hilton", "Copenhagen", Hotel.HotelType.STANDARD);
+
+        // when
+        Message msg =
+        given()
+                .contentType(ContentType.JSON)
+                .body(hilton)
+                .when()
+                .post(BASE_URL + "/hotels")
+                .then()
+                .statusCode(500)
+                .extract().body().as(Message.class);
+
+        assertEquals(msg.status(), 0);
+        assertTrue(msg.message().contains("duplicate key value violates unique constraint"));
+
+    }
+
+    @Test
     @DisplayName("Update hotel address by id")
     void update() {
 
@@ -104,15 +168,15 @@ class HotelControllerTest {
 
         // when
         HotelDto updHotel =
-        given()
-                .contentType("application/json")
-                .body(update)
-                .when()
-                .put(BASE_URL + "/hotels/1")
-                .then()
-                .assertThat()
-                .statusCode(200)
-                .extract().body().as(HotelDto.class);
+                given()
+                        .contentType("application/json")
+                        .body(update)
+                        .when()
+                        .put(BASE_URL + "/hotels/1")
+                        .then()
+                        .assertThat()
+                        .statusCode(200)
+                        .extract().body().as(HotelDto.class);
 
         // then
         assertEquals(updHotel.getHotelAddress(), update.getHotelAddress());
@@ -152,29 +216,20 @@ class HotelControllerTest {
 
         // when
         ValidationMessage error =
-        given()
-                .contentType("application/json")
-                .when()
-                .delete(BASE_URL + "/hotels/" + hotelId)
-                .then()
-                .assertThat()
-                .statusCode(404)
-                .extract().body().as(ValidationMessage.class);
+                given()
+                        .contentType("application/json")
+                        .when()
+                        .delete(BASE_URL + "/hotels/" + hotelId)
+                        .then()
+                        .assertThat()
+                        .statusCode(404)
+                        .extract().body().as(ValidationMessage.class);
 
         // then
         assertEquals(error.message(), "Not a valid id");
         assertEquals(error.value(), hotelId);
         assertEquals(error.args(), new LinkedHashMap<>());
-
     }
 
-    @Test
-    void validateEntity() {
 
-        // given
-
-        // when
-
-        // then
-    }
 }

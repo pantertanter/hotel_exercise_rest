@@ -89,7 +89,6 @@ public class HotelController implements IController<Hotel, Integer> {
         return ctx.bodyValidator(Hotel.class)
                 .check( h -> h.getHotelAddress() != null && !h.getHotelAddress().isEmpty(), "Hotel address must be set")
                 .check( h -> h.getHotelName() != null && !h.getHotelName().isEmpty(), "Hotel name must be set")
-                .check( h -> h.getHotelType() != null, "Hotel type must be set")
                 .get();
     }
 

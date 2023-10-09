@@ -6,6 +6,7 @@ import io.javalin.Javalin;
 import io.javalin.apibuilder.EndpointGroup;
 import io.javalin.http.Context;
 import io.javalin.validation.ValidationException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,10 +38,7 @@ public class Routes {
 
             app.after(ctx -> LOGGER.info(" Request {} - {} was handled with status code {}", count++, ctx.attribute("requestInfo"), ctx.status()));
 
-//            app.error(400, ctx -> {
-//                ctx.status(400);
-//                ctx.json(new Message(400, "Bad Request - " + ctx.req().getRequestURI()));
-//            });
+            app.exception(ConstraintViolationException.class, exceptionController::constraintViolationExceptionHandler);
             app.exception(ValidationException.class, exceptionController::validationExceptionHandler);
             app.exception(ApiException.class, exceptionController::apiExceptionHandler);
             app.exception(Exception.class, exceptionController::exceptionHandler);

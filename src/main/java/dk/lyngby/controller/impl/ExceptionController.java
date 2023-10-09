@@ -7,25 +7,47 @@ import dk.lyngby.routes.Routes;
 import io.javalin.http.Context;
 import io.javalin.validation.ValidationError;
 import io.javalin.validation.ValidationException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class ExceptionController {
     private final Logger LOGGER = LoggerFactory.getLogger(Routes.class);
 
-    public void validationExceptionHandler(ValidationException e , Context ctx) {
+    public void validationExceptionHandler(ValidationException e, Context ctx) {
         LOGGER.error(ctx.attribute("requestInfo") + " " + ctx.res().getStatus() + " " + ctx.body());
 
-        List<ValidationError<Object>> errors = e.getErrors().get("id");
-        String message = errors.get(0).getMessage();
-        Map<String, Object> args = errors.get(0).getArgs();
-        Object value = errors.get(0).getValue();
+        Map<String, List<ValidationError<Object>>> errors = e.getErrors();
+        List<ValidationError<Object>> errorList = new ArrayList<>();
+        int statusCode = 0;
 
-        ctx.status(404);
+        if (errors.containsKey("id")) {
+            errorList = errors.get("id");
+            statusCode = 404;
+        }
+
+        if (errors.containsKey("REQUEST_BODY")) {
+            errorList = errors.get("REQUEST_BODY");
+            statusCode = 400;
+        }
+
+        String message = errorList.get(0).getMessage();
+        Map<String, Object> args = errorList.get(0).getArgs();
+        Object value = errorList.get(0).getValue();
+
+        ctx.status(statusCode);
         ctx.json(new ValidationMessage(message, args, value));
+    }
+
+    public void constraintViolationExceptionHandler(ConstraintViolationException e, Context ctx) {
+        LOGGER.error(ctx.attribute("requestInfo") + " " + ctx.res().getStatus() + " " + ctx.body());
+        ctx.status(500);
+        ctx.json(new Message(e.getErrorCode(), e.getSQLException().getMessage()));
     }
 
     public void apiExceptionHandler(ApiException e, Context ctx) {
@@ -33,10 +55,15 @@ public class ExceptionController {
         ctx.status(e.getStatusCode());
         ctx.json(new Message(e.getStatusCode(), e.getMessage()));
     }
+
     public void exceptionHandler(Exception e, Context ctx) {
         LOGGER.error(ctx.attribute("requestInfo") + " " + ctx.res().getStatus() + " " + e.getMessage());
+
+        System.out.println("======================================");
+        System.out.println(Arrays.toString(e.getStackTrace()));
+        System.out.println("======================================");
+
         ctx.status(500);
         ctx.json(new Message(500, e.getMessage()));
     }
-
 }

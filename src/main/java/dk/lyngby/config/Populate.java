@@ -26,6 +26,8 @@ public class Populate {
 
             em.createNamedQuery("Room.deleteAllRows").executeUpdate();
             em.createNamedQuery("Hotel.deleteAllRows").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE room_room_id_seq RESTART WITH 1").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE hotel_hotel_id_seq RESTART WITH 1").executeUpdate();
 
             Hotel california = new Hotel("Hotel California", "California", Hotel.HotelType.LUXURY);
             Hotel hilton = new Hotel("Hilton", "Copenhagen", Hotel.HotelType.STANDARD);

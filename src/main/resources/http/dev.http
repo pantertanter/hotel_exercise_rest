@@ -12,9 +12,9 @@ POST {{url}}/hotels
 Content-Type: application/json
 
 {
-  "hotelName": "Scandic",
-  "hotelAddress": "Lyngby",
-  "hotelType": "STANDARD"
+  "hotelName": "Radisson",
+  "hotelAddress": "Sindelfingen",
+  "hotelType": "BUDGET"
 }
 
 ###
@@ -30,7 +30,7 @@ Content-Type: application/json
 
 ###
 
-DELETE {{url}}/hotels/200
+DELETE {{url}}/hotels/54
 
 ###
 
