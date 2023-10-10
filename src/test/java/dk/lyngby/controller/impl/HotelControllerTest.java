@@ -11,10 +11,7 @@ import io.restassured.http.ContentType;
 import jakarta.persistence.EntityManagerFactory;
 import org.eclipse.jetty.http.HttpStatus;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -40,6 +37,8 @@ class HotelControllerTest
         HibernateConfig.setTest(true);
         emfTest = HibernateConfig.getEntityManagerFactory();
         hotelController = new HotelController();
+        app = Javalin.create();
+        ApplicationConfig.startServer(app, 7777);
     }
 
     @BeforeEach
@@ -65,14 +64,11 @@ class HotelControllerTest
             em.persist(h1);
             em.persist(h2);
             em.getTransaction().commit();
-
-            app = Javalin.create();
-            ApplicationConfig.startServer(app, 7777);
         }
     }
 
-    @AfterEach
-    void tearDown()
+    @AfterAll
+    static void tearDown()
     {
         HibernateConfig.setTest(false);
         ApplicationConfig.stopServer(app);
