@@ -1,6 +1,7 @@
 package dk.lyngby.routes;
 
 import dk.lyngby.controller.impl.HotelController;
+import dk.lyngby.security.RouteRoles;
 import io.javalin.apibuilder.EndpointGroup;
 
 import static io.javalin.apibuilder.ApiBuilder.*;

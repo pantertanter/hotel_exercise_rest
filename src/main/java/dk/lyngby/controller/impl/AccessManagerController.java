@@ -11,7 +11,7 @@ import io.javalin.security.RouteRole;
 
 import java.util.Set;
 
-public class AccessManagerHandler {
+public class AccessManagerController {
 
     private final TokenFactory TOKEN_FACTORY = TokenFactory.getInstance();
 

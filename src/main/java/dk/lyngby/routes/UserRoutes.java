@@ -4,22 +4,18 @@ import dk.lyngby.controller.impl.UserController;
 import dk.lyngby.security.RouteRoles;
 import io.javalin.apibuilder.EndpointGroup;
 
-import static io.javalin.apibuilder.ApiBuilder.*;
-import static io.javalin.apibuilder.ApiBuilder.delete;
+import static io.javalin.apibuilder.ApiBuilder.path;
+import static io.javalin.apibuilder.ApiBuilder.post;
 
 public class UserRoutes {
-    private final UserController userHandler = new UserController();
+    private final UserController userController = new UserController();
 
     protected EndpointGroup getRoutes() {
 
         return () -> {
             path("/auth", () -> {
-                post("/login", userHandler::login);
-                post("/register", userHandler::register);
-                get("/", userHandler::readAll, dk.lyngby.security.RouteRoles.ADMIN);
-                get("{name}", userHandler::read, dk.lyngby.security.RouteRoles.ADMIN);
-                put("{name}", userHandler::update, dk.lyngby.security.RouteRoles.ADMIN);
-                delete("{name}", userHandler::delete, RouteRoles.ADMIN);
+                post("/login", userController::login, RouteRoles.ANYONE);
+                post("/register", userController::register, RouteRoles.ANYONE);
             });
         };
     }

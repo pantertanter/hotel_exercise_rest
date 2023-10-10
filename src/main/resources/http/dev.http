@@ -1,15 +1,18 @@
 // Hotel API
 
 GET {{url}}/hotels
+Authorization: Bearer {{token}}
 
 ###
 
 GET {{url}}/hotels/6
+Authorization: Bearer {{token}}
 
 ###
 
 POST {{url}}/hotels
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "hotelName": "Radisson",
@@ -21,6 +24,7 @@ Content-Type: application/json
 
 PUT {{url}}/hotels/200
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "hotelName": "Scandic",
@@ -31,21 +35,25 @@ Content-Type: application/json
 ###
 
 DELETE {{url}}/hotels/54
+Authorization: Bearer {{token}}
 
 ###
 
 // Room API
 
 GET {{url}}/rooms
+Authorization: Bearer {{token}}
 
 ###
 
 GET {{url}}/rooms/100
+Authorization: Bearer {{token}}
 
 ###
 
 POST {{url}}/rooms/hotel/9
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "roomNumber": 112,

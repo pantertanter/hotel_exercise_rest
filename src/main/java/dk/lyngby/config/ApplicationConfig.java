@@ -1,6 +1,6 @@
 package dk.lyngby.config;
 
-import dk.lyngby.controller.impl.AccessManagerHandler;
+import dk.lyngby.controller.impl.AccessManagerController;
 import dk.lyngby.routes.Routes;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
@@ -16,7 +16,7 @@ import java.util.Properties;
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class ApplicationConfig {
 
-    private static final AccessManagerHandler ACCESS_MANAGER_HANDLER = new AccessManagerHandler();
+    private static final AccessManagerController ACCESS_MANAGER_HANDLER = new AccessManagerController();
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationConfig.class);
 
     private static void configuration(JavalinConfig config) {

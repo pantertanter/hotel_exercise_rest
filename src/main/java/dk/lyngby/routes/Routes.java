@@ -2,6 +2,7 @@ package dk.lyngby.routes;
 
 import dk.lyngby.controller.impl.ExceptionController;
 import dk.lyngby.exception.ApiException;
+import dk.lyngby.exception.AuthorizationException;
 import io.javalin.Javalin;
 import io.javalin.apibuilder.EndpointGroup;
 import io.javalin.http.Context;
@@ -43,6 +44,7 @@ public class Routes {
             app.exception(ConstraintViolationException.class, exceptionController::constraintViolationExceptionHandler);
             app.exception(ValidationException.class, exceptionController::validationExceptionHandler);
             app.exception(ApiException.class, exceptionController::apiExceptionHandler);
+            app.exception(AuthorizationException.class, exceptionController::exceptionHandlerNotAuthorized);
             app.exception(Exception.class, exceptionController::exceptionHandler);
 
         };
