@@ -13,11 +13,11 @@ public class RoomRoute {
 
         return () -> {
             path("/rooms", () -> {
-                post("/hotel/{id}", roomController::create);
-                get("/", roomController::readAll);
-                get("/{id}", roomController::read);
-                put("/{id}", roomController::update);
-                delete("/{id}", roomController::delete);
+                post("/hotel/{id}", roomController::create, RouteRoles.ADMIN, RouteRoles.MANAGER);
+                get("/", roomController::readAll, RouteRoles.ANYONE);
+                get("/{id}", roomController::read, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
+                put("/{id}", roomController::update, RouteRoles.ADMIN, RouteRoles.MANAGER);
+                delete("/{id}", roomController::delete, RouteRoles.ADMIN, RouteRoles.MANAGER);
             });
         };
     }
