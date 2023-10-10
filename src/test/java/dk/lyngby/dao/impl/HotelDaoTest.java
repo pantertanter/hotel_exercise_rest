@@ -2,8 +2,11 @@ package dk.lyngby.dao.impl;
 
 import dk.lyngby.config.HibernateConfig;
 import dk.lyngby.config.Populate;
+import dk.lyngby.model.Hotel;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,25 +35,79 @@ class HotelDaoTest {
 
     @Test
     void read() {
+
+        // given
+        Hotel expected = new Hotel("Hotel California", "California", Hotel.HotelType.LUXURY);
+
+        // when
+        Hotel actually = hotelDao.read(1);
+
+        // then
+        assertEquals(expected, actually);
     }
 
     @Test
     void readAll() {
+
+        // given
+        int expected = 3;
+
+        // when
+        List<Hotel> actually = hotelDao.readAll();
+
+        // then
+        assertEquals(expected, actually.size());
     }
 
     @Test
     void create() {
+
+        // given
+        Hotel expected = new Hotel("Radisson", "Stuttgart", Hotel.HotelType.STANDARD);
+
+        // when
+        Hotel actually = hotelDao.create(expected);
+
+        // then
+        assertEquals(expected, actually);
     }
 
     @Test
     void update() {
+
+        // given
+        Hotel expected = new Hotel("Hotel California", "California Boulevard", Hotel.HotelType.LUXURY);
+
+        // when
+        Hotel actually = hotelDao.update(1, expected);
+
+        // then
+        assertEquals(expected, actually);
     }
 
     @Test
     void delete() {
+
+        // given
+        int hotelId = 1;
+
+        // when
+        hotelDao.delete(hotelId);
+
+        // then
+        assertNull(hotelDao.read(hotelId));
     }
 
     @Test
     void validatePrimaryKey() {
+
+        // given
+        boolean expected = true;
+
+        // when
+        boolean actually = hotelDao.validatePrimaryKey(1);
+
+        // then
+        assertEquals(expected, actually);
     }
 }
