@@ -48,7 +48,7 @@ POST {{url}}/rooms/hotel/9
 Content-Type: application/json
 
 {
-  "roomNumber": 11,
+  "roomNumber": 112,
   "roomPrice": 1150,
   "roomType": "SINGLE"
 }

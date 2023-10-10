@@ -20,6 +20,7 @@ public class Populate {
 
         Set<Room> calRooms = getCalRooms();
         Set<Room> hilRooms = getHilRooms();
+        Set<Room> motelRooms = getMotelRooms();
 
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -31,10 +32,13 @@ public class Populate {
 
             Hotel california = new Hotel("Hotel California", "California", Hotel.HotelType.LUXURY);
             Hotel hilton = new Hotel("Hilton", "Copenhagen", Hotel.HotelType.STANDARD);
+            Hotel motel = new Hotel("Motel", "Copenhagen", Hotel.HotelType.BUDGET);
             california.setRooms(calRooms);
             hilton.setRooms(hilRooms);
+            motel.setRooms(motelRooms);
             em.persist(california);
             em.persist(hilton);
+            em.persist(motel);
             em.getTransaction().commit();
         }
     }
@@ -62,6 +66,16 @@ public class Populate {
         Room r116 = new Room(116, new BigDecimal(4500), Room.RoomType.SUITE);
 
         Room[] roomArray = {r111, r112, r113, r114, r115, r116};
+        return Set.of(roomArray);
+    }
+
+    @NotNull
+    private static Set<Room> getMotelRooms() {
+        Room r200 = new Room(200, new BigDecimal(1250), Room.RoomType.DOUBLE);
+        Room r201 = new Room(201, new BigDecimal(1250), Room.RoomType.DOUBLE);
+        Room r202 = new Room(202, new BigDecimal(1000), Room.RoomType.SINGLE);
+
+        Room[] roomArray = {r200, r201, r202};
         return Set.of(roomArray);
     }
 }

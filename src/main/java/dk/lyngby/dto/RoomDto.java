@@ -3,19 +3,22 @@ package dk.lyngby.dto;
 import dk.lyngby.model.Room;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @NoArgsConstructor
 @Getter
+@ToString
 public class RoomDto {
     private Integer roomNumber;
     private Integer hotelId;
-    private Integer price;
+    private BigDecimal roomPrice;
 
     public RoomDto(Room room) {
         this.roomNumber = room.getRoomNumber();
-        this.price = room.getRoomPrice().intValue();
+        this.roomPrice = BigDecimal.valueOf(room.getRoomPrice().intValue());
         this.hotelId = room.getHotel().getId() != null ? room.getHotel().getId() : null;
     }
 

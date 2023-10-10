@@ -15,8 +15,10 @@ import org.junit.jupiter.api.*;
 import java.util.LinkedHashMap;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HotelControllerTest {
 
@@ -34,11 +36,11 @@ class HotelControllerTest {
         // Start server
         app = Javalin.create();
         ApplicationConfig.startServer(app, 7777);
-        Populate.populateData(emfTest);
     }
 
     @BeforeEach
     void setUp() {
+        Populate.populateData(emfTest);
     }
 
     @AfterAll
@@ -53,7 +55,7 @@ class HotelControllerTest {
     void read() {
 
         // given
-        int hotelId = 1;
+        int hotelId = 3;
 
         // when
         given()
@@ -64,9 +66,9 @@ class HotelControllerTest {
                 .assertThat()
                 .statusCode(200)
                 .body("id", equalTo(hotelId))
-                .body("hotelName", equalTo("Hotel California"))
-                .body("hotelAddress", equalTo("California"))
-                .body("rooms", hasSize(6));
+                .body("hotelName", equalTo("Motel"))
+                .body("hotelAddress", equalTo("Copenhagen"))
+                .body("rooms", hasSize(3));
 
         // then
     }
@@ -75,7 +77,7 @@ class HotelControllerTest {
     @DisplayName("Read all hotels")
     void readAll() {
         // given
-        int listSize = 2;
+        int listSize = 3;
 
         // when
         given()
@@ -95,7 +97,7 @@ class HotelControllerTest {
 
         // given
         Hotel h3 = new Hotel("Cab-inn", "Østergade 2", Hotel.HotelType.BUDGET);
-        int hotelId = 3;
+        int hotelId = 4;
 
         // when
         HotelDto hotel =
@@ -124,14 +126,14 @@ class HotelControllerTest {
 
         // when
         ValidationMessage error =
-        given()
-                .contentType(ContentType.JSON)
-                .body(jsonHotelWithoutName)
-                .when()
-                .post(BASE_URL + "/hotels")
-                .then()
-                .statusCode(400)
-                .extract().body().as(ValidationMessage.class);
+                given()
+                        .contentType(ContentType.JSON)
+                        .body(jsonHotelWithoutName)
+                        .when()
+                        .post(BASE_URL + "/hotels")
+                        .then()
+                        .statusCode(400)
+                        .extract().body().as(ValidationMessage.class);
 
         // then
         assertEquals(error.message(), "Hotel name must be set");
@@ -145,14 +147,14 @@ class HotelControllerTest {
 
         // when
         Message msg =
-        given()
-                .contentType(ContentType.JSON)
-                .body(hilton)
-                .when()
-                .post(BASE_URL + "/hotels")
-                .then()
-                .statusCode(500)
-                .extract().body().as(Message.class);
+                given()
+                        .contentType(ContentType.JSON)
+                        .body(hilton)
+                        .when()
+                        .post(BASE_URL + "/hotels")
+                        .then()
+                        .statusCode(500)
+                        .extract().body().as(Message.class);
 
         assertEquals(msg.status(), 0);
         assertTrue(msg.message().contains("duplicate key value violates unique constraint"));

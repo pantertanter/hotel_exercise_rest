@@ -11,9 +11,9 @@ import java.util.Objects;
 import java.util.Set;
 
 @Getter
+@ToString
 @NoArgsConstructor
 @Entity
-@ToString
 @Table(name = "hotel")
 @NamedQueries({
         @NamedQuery(name = "Hotel.deleteAllRows", query = "DELETE from Hotel"),
