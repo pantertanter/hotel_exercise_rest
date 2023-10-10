@@ -3,12 +3,12 @@ package dk.lyngby.exception;
 import lombok.Getter;
 
 @Getter
-public class ApiException extends Exception{
-
+public class AuthorizationException extends Exception {
     private final int statusCode;
 
-    public ApiException(int statusCode, String message) {
+    public AuthorizationException(int statusCode, String message) {
         super(message);
         this.statusCode = statusCode;
     }
+
 }

@@ -1,5 +1,6 @@
 package dk.lyngby.config;
 
+import dk.lyngby.controller.impl.AccessManagerHandler;
 import dk.lyngby.routes.Routes;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
@@ -15,12 +16,16 @@ import java.util.Properties;
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class ApplicationConfig {
 
+    private static final AccessManagerHandler ACCESS_MANAGER_HANDLER = new AccessManagerHandler();
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationConfig.class);
 
     private static void configuration(JavalinConfig config) {
         config.routing.contextPath = "/api/v1"; // base path for all routes
         config.http.defaultContentType = "application/json"; // default content type for requests
         config.plugins.register(new RouteOverviewPlugin("/")); // enables route overview at /
+
+        // access management roles allowed for routes (see AccessManagerHandler)
+        config.accessManager(ACCESS_MANAGER_HANDLER::accessManagerHandler);
     }
 
     public static void startServer(Javalin app, int port) {
