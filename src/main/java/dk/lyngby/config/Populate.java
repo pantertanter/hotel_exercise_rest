@@ -7,6 +7,8 @@ import jakarta.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class Populate {
@@ -16,7 +18,7 @@ public class Populate {
         populateData(emf);
     }
 
-    public static void populateData(EntityManagerFactory emf) {
+    public static List<Room> populateData(EntityManagerFactory emf) {
 
         Set<Room> calRooms = getCalRooms();
         Set<Room> hilRooms = getHilRooms();
@@ -40,6 +42,8 @@ public class Populate {
             em.persist(hilton);
             em.persist(motel);
             em.getTransaction().commit();
+
+            return new ArrayList<>(calRooms);
         }
     }
 

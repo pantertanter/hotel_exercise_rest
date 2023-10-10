@@ -66,7 +66,6 @@ public class RoomDao implements dk.lyngby.dao.IDao<Room, Integer> {
             em.getTransaction().begin();
 
             var r = em.find(Room.class, integer);
-            r.setRoomNumber(room.getRoomNumber());
             r.setRoomType(room.getRoomType());
             r.setRoomPrice(room.getRoomPrice());
 
