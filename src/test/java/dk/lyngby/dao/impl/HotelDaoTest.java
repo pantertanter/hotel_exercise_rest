@@ -1,19 +1,33 @@
 package dk.lyngby.dao.impl;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import dk.lyngby.config.HibernateConfig;
+import dk.lyngby.config.Populate;
+import jakarta.persistence.EntityManagerFactory;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class HotelDaoTest {
 
-    @BeforeEach
-    void setUp() {
+    private static HotelDao hotelDao;
+    private static EntityManagerFactory emfTest;
+
+
+    @BeforeAll
+    static void setUpAll() {
+        HibernateConfig.setTest(true);
+        emfTest = HibernateConfig.getEntityManagerFactory();
+        hotelDao = HotelDao.getInstance(emfTest);
     }
 
-    @AfterEach
-    void tearDown() {
+    @BeforeEach
+    void setUp() {
+        Populate.populateData(emfTest);
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        HibernateConfig.setTest(false);
     }
 
     @Test
