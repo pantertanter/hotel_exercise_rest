@@ -19,7 +19,7 @@ public class UserController {
     private final TokenFactory tokenFactory = TokenFactory.getInstance();
 
     public UserController() {
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+        EntityManagerFactory emf =HibernateConfig.getEntityManagerFactory();
         userDao = UserDao.getInstance(emf);
     }
 

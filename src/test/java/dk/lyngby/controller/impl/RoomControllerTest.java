@@ -10,6 +10,7 @@ import io.javalin.Javalin;
 import io.javalin.http.ContentType;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
+import utility.TestUtility;
 
 import java.math.BigDecimal;
 
@@ -22,6 +23,8 @@ class RoomControllerTest {
 
     private static Javalin app;
     private static EntityManagerFactory emfTest;
+    private static HibernateConfig hibernateConfig;
+    private static Object adminToken;
     private static final String BASE_URL = "http://localhost:7777/api/v1";
 
     @BeforeAll
@@ -29,10 +32,14 @@ class RoomControllerTest {
         // Setup test database
         HibernateConfig.setTest(true);
         emfTest = HibernateConfig.getEntityManagerFactory();
+        TestUtility.createUserTestData(emfTest);
 
         // Start server
         app = Javalin.create();
         ApplicationConfig.startServer(app, 7777);
+
+        // Get token
+        adminToken = TestUtility.getAdminToken();
     }
 
     @BeforeEach
@@ -69,21 +76,22 @@ class RoomControllerTest {
     }
 
     @Test
-    @DisplayName("Read all rooms")
+    @DisplayName("Read all rooms from a specific hotel")
     void readAll() {
         // given
-        int listSize = 15;
+        int listSize = 6;
+        int hotelId = 1;
 
         // when
         given()
                 .contentType("application/json")
                 .when()
-                .get(BASE_URL + "/rooms")
+                .get(BASE_URL + "/rooms/hotel/" + hotelId)
                 .then()
                 .assertThat()
                 .statusCode(200)
-                // then
-                .body("size()", equalTo(listSize));
+                .body("roomDtos", hasSize(listSize));
+
     }
 
     @Test
@@ -96,6 +104,7 @@ class RoomControllerTest {
         HotelDto hotel =
                 given()
                         .contentType(ContentType.JSON)
+                        .header("Authorization", adminToken)
                         .body(room)
                         .when()
                         .post(BASE_URL + "/rooms/hotel/" + hotelId)
@@ -120,6 +129,7 @@ class RoomControllerTest {
         RoomDto updRoom =
                 given()
                         .contentType("application/json")
+                        .header("Authorization", adminToken)
                         .body(update)
                         .when()
                         .put(BASE_URL + "/rooms/1")
@@ -141,6 +151,7 @@ class RoomControllerTest {
         // when
         given()
                 .contentType("application/json")
+                .header("Authorization", adminToken)
                 .when()
                 .delete(BASE_URL + "/rooms/" + roomId)
                 .then()
@@ -150,6 +161,7 @@ class RoomControllerTest {
         // then
         given()
                 .contentType("application/json")
+                .header("Authorization", adminToken)
                 .when()
                 .get(BASE_URL + "/rooms/" + roomId)
                 .then()

@@ -15,7 +15,6 @@ class HotelDaoTest {
     private static HotelDao hotelDao;
     private static EntityManagerFactory emfTest;
 
-
     @BeforeAll
     static void setUpAll() {
         HibernateConfig.setTest(true);

@@ -52,12 +52,12 @@ Authorization: Bearer {{token}}
 
 ###
 
-GET {{url}}/rooms/100
+GET {{url}}/rooms/1
 Authorization: Bearer {{token}}
 
 ###
 
-POST {{url}}/rooms/hotel/900
+POST {{url}}/rooms/hotel/3
 Content-Type: application/json
 Authorization: Bearer {{token}}
 

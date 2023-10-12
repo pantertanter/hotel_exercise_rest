@@ -21,7 +21,6 @@ class RoomDaoTest {
     private static List<Room> rooms;
     private static EntityManagerFactory emfTest;
 
-
     @BeforeAll
     static void setUpAll() {
         HibernateConfig.setTest(true);
