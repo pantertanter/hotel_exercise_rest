@@ -43,61 +43,6 @@ public class UserController {
         ctx.result(createResponse(userInfos[0], token));
     }
 
-//    @Override
-//    public void read(Context ctx) throws ApiException {
-//        // request
-//        String userName = ctx.pathParamAsClass("name", String.class).check(this::validatePrimaryKey, "Not a valid name").get();
-//        // entity
-//        User user = userDao.read(userName);
-//        // dto
-//        UserDTO userDTO = new UserDTO(user);
-//        // response
-//        ctx.res().setStatus(200);
-//        ctx.json(userDTO, UserDTO.class);
-//    }
-//
-//    @Override
-//    public void readAll(Context ctx) {
-//        // entity
-//        List<User> users = userDao.readAll();
-//        // dto
-//        List<UserDTO> userDTOS = UserDTO.toUserDTOList(users);
-//        // response
-//        ctx.status(200);
-//        ctx.json(userDTOS, UserDTO.class);
-//    }
-//
-//    @Override
-//    public void create(Context ctx) {
-//        ctx.result("Use register instead");
-//    }
-//
-//    @Override
-//    public void update(Context ctx) {
-//        ctx.result("Not implemented");
-//    }
-//
-//    @Override
-//    public void delete(Context ctx) throws ApiException {
-//        // request
-//        String userName = ctx.pathParamAsClass("name", String.class).check(this::validatePrimaryKey, "Not a valid name").get();
-//        // entity
-//        userDao.delete(userName);
-//        // response
-//        ctx.res().setStatus(200);
-//        ctx.json(new Message(200, "User with name " + userName + " deleted"), Message.class);
-//    }
-//
-//    @Override
-//    public boolean validatePrimaryKey(String userName) {
-//        return userDao.validatePrimaryKey(userName);
-//    }
-//
-//    @Override
-//    public UserDTO validateEntity(Context ctx) {
-//        return null;
-//    }
-
     private String createResponse(String username, String token) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode responseJson = mapper.createObjectNode();
@@ -106,7 +51,7 @@ public class UserController {
         return responseJson.toString();
     }
 
-    private String[] getUserInfos(Context ctx, boolean tryLogin) throws ApiException {
+    private String[] getUserInfos(Context ctx, boolean tryLogin) throws ApiException, AuthorizationException {
         String request = ctx.body();
         return tokenFactory.parseJsonObject(request, tryLogin);
     }

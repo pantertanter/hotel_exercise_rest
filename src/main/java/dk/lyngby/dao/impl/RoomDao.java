@@ -50,6 +50,14 @@ public class RoomDao implements dk.lyngby.dao.IDao<Room, Integer> {
         }
     }
 
+    public List<Room> readAll(int hotelId) {
+        try (var em = emf.createEntityManager()) {
+            var query = em.createQuery("SELECT r FROM Room r WHERE r.hotel.id = :hotelId", Room.class)
+                    .setParameter("hotelId", hotelId);
+            return query.getResultList();
+        }
+    }
+
     @Override
     public Room create(Room room) {
         try (var em = emf.createEntityManager()) {

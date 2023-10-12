@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -27,19 +26,21 @@ public class ExceptionController {
 
     public void validationExceptionHandler(ValidationException e, Context ctx) {
         LOGGER.error(ctx.attribute("requestInfo") + " " + ctx.res().getStatus() + " " + ctx.body());
-
+        System.out.println("===========================================================");
+        System.out.println(e.getErrors());
+        System.out.println("===========================================================");
         Map<String, List<ValidationError<Object>>> errors = e.getErrors();
         List<ValidationError<Object>> errorList = new ArrayList<>();
         int statusCode = 0;
 
-        if (errors.containsKey("id")) {
-            errorList = errors.get("id");
-            statusCode = 404;
-        }
-
         if (errors.containsKey("REQUEST_BODY")) {
             errorList = errors.get("REQUEST_BODY");
             statusCode = 400;
+        }
+
+        if (errors.containsKey("id")) {
+            errorList = errors.get("id");
+            statusCode = 404;
         }
 
         String message = errorList.get(0).getMessage();
@@ -64,11 +65,6 @@ public class ExceptionController {
 
     public void exceptionHandler(Exception e, Context ctx) {
         LOGGER.error(ctx.attribute("requestInfo") + " " + ctx.res().getStatus() + " " + e.getMessage());
-
-        System.out.println("======================================");
-        System.out.println(Arrays.toString(e.getStackTrace()));
-        System.out.println("======================================");
-
         ctx.status(500);
         ctx.json(new Message(500, e.getMessage()));
     }

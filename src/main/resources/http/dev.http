@@ -5,7 +5,7 @@ Authorization: Bearer {{token}}
 
 ###
 
-GET {{url}}/hotels/6
+GET {{url}}/hotels/600
 Authorization: Bearer {{token}}
 
 ###
@@ -34,14 +34,20 @@ Authorization: Bearer {{token}}
 
 ###
 
-DELETE {{url}}/hotels/54
+DELETE {{url}}/hotels/540
 Authorization: Bearer {{token}}
 
 ###
 
 // Room API
 
-GET {{url}}/rooms
+GET {{url}}/rooms/60
+Authorization: Bearer {{token}}
+
+###
+
+// filter rooms by prize
+GET {{url}}/rooms/hotel/1?min-price=2000&max-price=5000
 Authorization: Bearer {{token}}
 
 ###
@@ -51,7 +57,7 @@ Authorization: Bearer {{token}}
 
 ###
 
-POST {{url}}/rooms/hotel/9
+POST {{url}}/rooms/hotel/900
 Content-Type: application/json
 Authorization: Bearer {{token}}
 

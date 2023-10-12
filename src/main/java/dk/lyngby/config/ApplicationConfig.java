@@ -22,7 +22,7 @@ public class ApplicationConfig {
     private static void configuration(JavalinConfig config) {
         config.routing.contextPath = "/api/v1"; // base path for all routes
         config.http.defaultContentType = "application/json"; // default content type for requests
-        config.plugins.register(new RouteOverviewPlugin("/")); // enables route overview at /
+        config.plugins.register(new RouteOverviewPlugin("/routes")); // enables route overview at /
         config.accessManager(ACCESS_MANAGER_HANDLER::accessManagerHandler);
     }
 

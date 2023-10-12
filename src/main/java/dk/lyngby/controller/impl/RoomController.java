@@ -3,6 +3,7 @@ package dk.lyngby.controller.impl;
 import dk.lyngby.config.HibernateConfig;
 import dk.lyngby.controller.IController;
 import dk.lyngby.dao.impl.RoomDao;
+import dk.lyngby.dao.impl.RoomListDto;
 import dk.lyngby.dto.HotelDto;
 import dk.lyngby.dto.RoomDto;
 import dk.lyngby.exception.Message;
@@ -11,7 +12,10 @@ import dk.lyngby.model.Room;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 public class RoomController implements IController<Room, Integer> {
@@ -27,6 +31,7 @@ public class RoomController implements IController<Room, Integer> {
     public void read(Context ctx) {
         // request
         int id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+
         // entity
         Room room = dao.read(id);
         // dto
@@ -39,13 +44,31 @@ public class RoomController implements IController<Room, Integer> {
 
     @Override
     public void readAll(Context ctx) {
+
+        int hotelId = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
+
+        Map<String, List<String>> queryParamMap = ctx.queryParamMap();
+
         // entity
-        List<Room> rooms = dao.readAll();
+        List<Room> rooms = dao.readAll(hotelId);
+
+        if(!queryParamMap.isEmpty()) {
+            Set<String> keySet = new HashSet<>(queryParamMap.keySet());
+
+            if(keySet.contains("min-price") && keySet.contains("max-price")) {
+                double minPrice = Double.parseDouble(queryParamMap.get("min-price").get(0));
+                double maxPrice = Double.parseDouble(queryParamMap.get("max-price").get(0));
+                rooms = rooms.stream().filter(r -> r.getRoomPrice().doubleValue() >= minPrice && r.getRoomPrice().doubleValue() <= maxPrice).toList();
+            }
+        }
+
         // dto
         List<RoomDto> roomDtos = RoomDto.toRoomDTOList(rooms);
+        RoomListDto roomListDto = new RoomListDto(roomDtos.size(), roomDtos);
+
         // response
         ctx.res().setStatus(200);
-        ctx.json(roomDtos, RoomDto.class);
+        ctx.json(roomListDto, RoomListDto.class);
 
     }
 

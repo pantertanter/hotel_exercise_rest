@@ -51,7 +51,7 @@ public class Room {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Room room = (Room) o;
-        return Objects.equals(roomNumber, room.roomNumber) && Objects.equals(hotel, room.hotel);
+        return Objects.equals(roomNumber, room.roomNumber) && Objects.equals(hotel.getId(), room.hotel.getId());
     }
 
     @Override

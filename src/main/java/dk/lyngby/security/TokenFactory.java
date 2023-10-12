@@ -56,7 +56,7 @@ public class TokenFactory {
         return null;
     }
 
-    public String[] parseJsonObject(String jsonString, Boolean tryLogin) throws ApiException {
+    public String[] parseJsonObject(String jsonString, Boolean tryLogin) throws AuthorizationException, ApiException {
         try {
             List<String> roles = Arrays.asList("user", "admin", "manager");
 
@@ -68,7 +68,7 @@ public class TokenFactory {
 
             if (!tryLogin) {
                 role = json.get("role").toString();
-                if (!roles.contains(role)) throw new ApiException(400, "Role not valid");
+                if (!roles.contains(role)) throw new AuthorizationException(400, "Role not valid");
             }
 
             return new String[]{username, password, role};
@@ -92,7 +92,7 @@ public class TokenFactory {
             Date date = new Date();
             return signature.signToken(userName, rolesAsString, date);
         } catch (JOSEException e) {
-            throw new ApiException(500, "Could not create token");
+            throw new ApiException(401, "Could not create token");
         }
     }
 
