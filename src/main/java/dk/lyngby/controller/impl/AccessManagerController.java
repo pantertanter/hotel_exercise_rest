@@ -19,7 +19,7 @@ public class AccessManagerController {
         String path = ctx.path();
         boolean isAuthorized = false;
 
-        if (path.equals("/api/v1/auth/login") || path.equals("/api/v1/auth/register") || path.equals("/api/v1/routes") || permittedRoles.contains(RouteRoles.ANYONE)) {
+        if (path.equals("/api/v1/routes") || permittedRoles.contains(RouteRoles.ANYONE)) {
             handler.handle(ctx);
             return;
         } else {
@@ -40,13 +40,17 @@ public class AccessManagerController {
     }
 
     private RouteRole[] getUserRole(Context ctx) throws AuthorizationException, ApiException {
+
+        if (ctx.header("Authorization") == null) {
+            throw new AuthorizationException(401, "No token provided");
+        }
+
         String token = ctx.header("Authorization").split(" ")[1];
         UserDTO userDTO = TOKEN_FACTORY.verifyToken(token);
 
         if (userDTO == null) {
             throw new ApiException(401, "Invalid token");
         }
-
         return userDTO.getRoles().stream().map(r -> RouteRoles.valueOf(r.toUpperCase())).toArray(RouteRole[]::new);
     }
 

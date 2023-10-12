@@ -16,9 +16,9 @@ public class RoomRoute {
             path("/rooms", () -> {
                 post("/hotel/{id}", roomController::create, RouteRoles.ADMIN, RouteRoles.MANAGER);
                 get("/hotel/{id}", roomController::readAll, RouteRoles.ANYONE);
-                get("/{id}", roomController::read, RouteRoles.ADMIN, RouteRoles.MANAGER);
+                get("/{id}", roomController::read, RouteRoles.ANYONE);
                 put("/{id}", roomController::update, RouteRoles.ADMIN, RouteRoles.MANAGER);
-                delete("/{id}", roomController::delete, RouteRoles.ADMIN, RouteRoles.MANAGER);
+                delete("/{id}", roomController::delete, RouteRoles.ADMIN);
             });
         };
     }

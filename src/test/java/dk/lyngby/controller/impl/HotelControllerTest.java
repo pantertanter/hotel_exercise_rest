@@ -11,6 +11,7 @@ import io.javalin.Javalin;
 import io.javalin.http.ContentType;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
+import utility.TestUtility;
 
 import java.util.LinkedHashMap;
 
@@ -24,6 +25,7 @@ class HotelControllerTest {
 
     private static Javalin app;
     private static EntityManagerFactory emfTest;
+    private static Object adminToken;
     private static final String BASE_URL = "http://localhost:7777/api/v1";
 
     @BeforeAll
@@ -32,10 +34,15 @@ class HotelControllerTest {
         // Setup test database
         HibernateConfig.setTest(true);
         emfTest = HibernateConfig.getEntityManagerFactory();
+        TestUtility.createUserTestData(emfTest);
 
         // Start server
         app = Javalin.create();
         ApplicationConfig.startServer(app, 7777);
+
+        // Get token
+        adminToken = TestUtility.getAdminToken();
+
     }
 
     @BeforeEach
@@ -45,7 +52,6 @@ class HotelControllerTest {
 
     @AfterAll
     static void tearDown() {
-        System.out.println("Tear down HotelControllerTest");
         HibernateConfig.setTest(false);
         ApplicationConfig.stopServer(app);
     }
@@ -82,6 +88,7 @@ class HotelControllerTest {
         // when
         given()
                 .contentType("application/json")
+                .header("Authorization", adminToken)
                 .when()
                 .get(BASE_URL + "/hotels")
                 .then()
@@ -98,11 +105,13 @@ class HotelControllerTest {
         // given
         Hotel h3 = new Hotel("Cab-inn", "Østergade 2", Hotel.HotelType.BUDGET);
         int hotelId = 4;
+        System.out.println(adminToken);
 
         // when
         HotelDto hotel =
                 given()
                         .contentType(ContentType.JSON)
+                        .header("Authorization", adminToken)
                         .body(h3)
                         .when()
                         .post(BASE_URL + "/hotels")
@@ -128,6 +137,7 @@ class HotelControllerTest {
         ValidationMessage error =
                 given()
                         .contentType(ContentType.JSON)
+                        .header("Authorization", adminToken)
                         .body(jsonHotelWithoutName)
                         .when()
                         .post(BASE_URL + "/hotels")
@@ -149,6 +159,7 @@ class HotelControllerTest {
         Message msg =
                 given()
                         .contentType(ContentType.JSON)
+                        .header("Authorization", adminToken)
                         .body(hilton)
                         .when()
                         .post(BASE_URL + "/hotels")
@@ -172,6 +183,7 @@ class HotelControllerTest {
         HotelDto updHotel =
                 given()
                         .contentType("application/json")
+                        .header("Authorization", adminToken)
                         .body(update)
                         .when()
                         .put(BASE_URL + "/hotels/1")
@@ -193,6 +205,7 @@ class HotelControllerTest {
         // when
         given()
                 .contentType("application/json")
+                .header("Authorization", adminToken)
                 .when()
                 .delete(BASE_URL + "/hotels/" + hotelId)
                 .then()
@@ -202,6 +215,7 @@ class HotelControllerTest {
         // then
         given()
                 .contentType("application/json")
+                .header("Authorization", adminToken)
                 .when()
                 .get(BASE_URL + "/hotels/" + hotelId)
                 .then()
@@ -220,6 +234,7 @@ class HotelControllerTest {
         ValidationMessage error =
                 given()
                         .contentType("application/json")
+                        .header("Authorization", adminToken)
                         .when()
                         .delete(BASE_URL + "/hotels/" + hotelId)
                         .then()
