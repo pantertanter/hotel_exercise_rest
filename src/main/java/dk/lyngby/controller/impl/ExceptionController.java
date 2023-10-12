@@ -26,9 +26,6 @@ public class ExceptionController {
 
     public void validationExceptionHandler(ValidationException e, Context ctx) {
         LOGGER.error(ctx.attribute("requestInfo") + " " + ctx.res().getStatus() + " " + ctx.body());
-        System.out.println("===========================================================");
-        System.out.println(e.getErrors());
-        System.out.println("===========================================================");
         Map<String, List<ValidationError<Object>>> errors = e.getErrors();
         List<ValidationError<Object>> errorList = new ArrayList<>();
         int statusCode = 0;
