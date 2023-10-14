@@ -3,9 +3,9 @@ POST {{url}}/auth/register
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "password": "admin",
-  "role": "admin"
+  "userName": "admin_user",
+  "userPassword": "admin123",
+  "roleList": ["ADMIN"]
 }
 
 > {% client.global.set("token", response.body.token); %}
@@ -15,19 +15,20 @@ POST {{url}}/auth/register
 Content-Type: application/json
 
 {
-  "username": "user",
-  "password": "user",
-  "role": "user"
+  "userName": "user",
+  "userPassword": "user",
+  "roleList": ["USER"]
 }
+> {% client.global.set("token", response.body.token); %}
 
 ### Register user_manager/manager
 POST {{url}}/auth/register
 Content-Type: application/json
 
 {
-  "username": "manager",
-  "password": "manager",
-  "role": "manager"
+  "userName": "test_manager",
+  "userPassword": "manager",
+  "roleList": ["MANAGER", "ADMIN"]
 }
 
 > {% client.global.set("token", response.body.token); %}
@@ -37,8 +38,8 @@ POST {{url}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "password": "admin"
+  "userName": "admin",
+  "userPassword": "admin123"
 }
 
 > {% client.global.set("token", response.body.token); %}
@@ -48,21 +49,19 @@ POST {{url}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "user",
-  "password": "user"
+  "userName": "user",
+  "userPassword": "user"
 }
-> {% client.global.set("token", response.body.token); %}
 
+> {% client.global.set("token", response.body.token); %}
 
 ### Login as manager
 POST {{url}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "manager",
-  "password": "manager"
+  "userName": "manager",
+  "userPassword": "manager123"
 }
 
 > {% client.global.set("token", response.body.token); %}
-
-###

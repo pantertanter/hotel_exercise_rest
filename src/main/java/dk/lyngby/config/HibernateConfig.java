@@ -12,7 +12,6 @@ import java.util.Properties;
 
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class HibernateConfig {
-
     private static EntityManagerFactory entityManagerFactory;
     private static Boolean isTest = false;
 
@@ -35,9 +34,9 @@ public class HibernateConfig {
                 props.put("hibernate.connection.url", ApplicationConfig.getProperty("db.connection.string") + ApplicationConfig.getProperty("db.name"));
                 props.put("hibernate.connection.username", ApplicationConfig.getProperty("db.username"));
                 props.put("hibernate.connection.password", ApplicationConfig.getProperty("db.password"));
-                props.put("hibernate.show_sql", "false"); // show sql in console
-                props.put("hibernate.format_sql", "false"); // format sql in console
-                props.put("hibernate.use_sql_comments", "false"); // show sql comments in console
+                props.put("hibernate.show_sql", "true"); // show sql in console
+                props.put("hibernate.format_sql", "true"); // format sql in console
+                props.put("hibernate.use_sql_comments", "true"); // show sql comments in console
             }
             props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect"); // dialect for postgresql
             props.put("hibernate.connection.driver_class", "org.postgresql.Driver"); // driver class for postgresql
@@ -95,12 +94,8 @@ public class HibernateConfig {
 
 
     private static void getAnnotationConfiguration(Configuration configuration) {
-        configuration.addAnnotatedClass(Hotel.class);
-        configuration.addAnnotatedClass(Room.class);
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Role.class);
-        configuration.addAnnotatedClass(Guest.class);
-        configuration.addAnnotatedClass(Bookning.class);
     }
 
     private static EntityManagerFactory getEntityManagerFactoryConfigDev() {

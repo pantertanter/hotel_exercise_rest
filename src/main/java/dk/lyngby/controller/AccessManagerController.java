@@ -1,10 +1,8 @@
-package dk.lyngby.controller.impl;
+package dk.lyngby.controller;
 
-import dk.lyngby.dto.UserDTO;
 import dk.lyngby.exception.ApiException;
 import dk.lyngby.exception.AuthorizationException;
-import dk.lyngby.security.RouteRoles;
-import dk.lyngby.security.TokenFactory;
+import dk.lyngby.model.Role;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.security.RouteRole;
@@ -13,18 +11,17 @@ import java.util.Set;
 
 public class AccessManagerController {
 
-    private final TokenFactory TOKEN_FACTORY = TokenFactory.getInstance();
-
     public void accessManagerHandler(Handler handler, Context ctx, Set<? extends RouteRole> permittedRoles) throws Exception {
+
         String path = ctx.path();
         boolean isAuthorized = false;
 
-        if (path.equals("/api/v1/routes") || permittedRoles.contains(RouteRoles.ANYONE)) {
+        if (path.equals("/api/v1/routes") || permittedRoles.contains(Role.RoleName.ANYONE)) {
             handler.handle(ctx);
             return;
         } else {
-            RouteRole[] userRole = getUserRole(ctx);
-            for (RouteRole role : userRole) {
+            RouteRole[] roles = getRoles(ctx);
+            for (RouteRole role : roles) {
                 if (permittedRoles.contains(role)) {
                     isAuthorized = true;
                     break;
@@ -39,19 +36,12 @@ public class AccessManagerController {
         }
     }
 
-    private RouteRole[] getUserRole(Context ctx) throws AuthorizationException, ApiException {
+    private Role.RoleName[] getRoles(Context ctx) throws AuthorizationException, ApiException {
 
-        if (ctx.header("Authorization") == null) {
-            throw new AuthorizationException(401, "No token provided");
-        }
-
+        // TODO: get user roles form user
         String token = ctx.header("Authorization").split(" ")[1];
-        UserDTO userDTO = TOKEN_FACTORY.verifyToken(token);
-
-        if (userDTO == null) {
-            throw new ApiException(401, "Invalid token");
-        }
-        return userDTO.getRoles().stream().map(r -> RouteRoles.valueOf(r.toUpperCase())).toArray(RouteRole[]::new);
+        System.out.println(token);
+        return new Role.RoleName[]{Role.RoleName.USER};
     }
 
 }
