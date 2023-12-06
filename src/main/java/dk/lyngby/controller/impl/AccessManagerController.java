@@ -9,6 +9,7 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.security.RouteRole;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class AccessManagerController
@@ -21,7 +22,12 @@ public class AccessManagerController
         String path = ctx.path();
         boolean isAuthorized = false;
 
-        if (path.equals("/api/v1/auth/login") || path.equals("/api/v1/auth/register") || path.equals("/api/v1/routes") || permittedRoles.contains(RouteRoles.ANYONE))
+        if (path.equals("/api/v1/auth/login") ||
+                path.equals("/api/v1/auth/register") ||
+                path.equals("/api/v1/routes") ||
+                permittedRoles.contains(RouteRoles.ANYONE) ||
+                ctx.method().toString().equals("OPTIONS")
+        )
         {
             handler.handle(ctx);
             return;
