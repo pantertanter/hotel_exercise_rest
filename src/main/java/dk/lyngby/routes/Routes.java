@@ -22,6 +22,8 @@ public class Routes {
     private final RoomRoute roomRoute = new RoomRoute();
     private final UserRoutes userRoutes = new UserRoutes();
 
+    private final PictureRoute pictureRoute = new PictureRoute();
+
     private final Logger LOGGER = LoggerFactory.getLogger(Routes.class);
 
     private void requestInfoHandler(Context ctx) {
@@ -37,6 +39,7 @@ public class Routes {
                 path("/", userRoutes.getRoutes());
                 path("/", hotelRoute.getRoutes());
                 path("/", roomRoute.getRoutes());
+                path("/", pictureRoute.getRoutes());
             });
 
             app.after(ctx -> LOGGER.info(" Request {} - {} was handled with status code {}", count++, ctx.attribute("requestInfo"), ctx.status()));

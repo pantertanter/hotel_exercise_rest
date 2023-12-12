@@ -1,0 +1,24 @@
+GET http://localhost:7070/api/v1/pictures
+###
+GET http://localhost:7070/api/v1/pictures/1
+###
+###
+POST http://localhost:7070/api/v1/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "admin1",
+  "password": "admin1"
+}
+
+###
+POST http://localhost:7070/api/v1/pictures
+Accept: application/json
+Content-Type: application/json
+Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6ImFkbWluMSIsImV4cCI6MTcwMjM3NjQ1OSwicm9sZXMiOiJhZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4xIn0.nU1ASmOo78NI8p187XORNbzksPsW-uhd-TvJKwndEjc"
+
+{
+    "url": "url for picture",
+    "alt": "alt for picture"
+}

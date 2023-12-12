@@ -1,8 +1,7 @@
 package dk.lyngby.config;
 
 
-import dk.lyngby.model.Hotel;
-import dk.lyngby.model.Room;
+import dk.lyngby.model.*;
 import jakarta.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,6 +20,13 @@ public class Populate {
             em.getTransaction().begin();
             Hotel california = new Hotel("Hotel California", "California", Hotel.HotelType.LUXURY);
             Hotel hilton = new Hotel("Hilton", "Copenhagen", Hotel.HotelType.STANDARD);
+            Picture picture = new Picture("https://images.unsplash.com/photo-1701906268416-b461ec4caa34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHwyfHx8fHx8Mnx8MTcwMjI5MzE1Mnw&ixlib=rb-4.0.3&q=80&w=400", "the sun is setting over the clouds in the sky");
+            User admin1 = new User("admin1", "admin1");
+            Role admin = new Role("admin");
+            admin1.addRole(admin);
+            em.persist(admin);
+            em.persist(admin1);
+            em.persist(picture);
             california.setRooms(calRooms);
             hilton.setRooms(hilRooms);
             em.persist(california);
