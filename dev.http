@@ -13,10 +13,10 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:7070/api/v1/pictures
+POST http://localhost:7070/api/v1/pictures/admin1
 Accept: application/json
 Content-Type: application/json
-Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6ImFkbWluMSIsImV4cCI6MTcwMjM3NjQ1OSwicm9sZXMiOiJhZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4xIn0.nU1ASmOo78NI8p187XORNbzksPsW-uhd-TvJKwndEjc"
+Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6ImFkbWluMSIsImV4cCI6MTcwMjQ4Mzk0MCwicm9sZXMiOiJhZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4xIn0.aTD3UFOeXoCgqGTiUA2tVuZHRPkieu7Dl2g_1yFbEuk"
 
 {
     "url": "url for picture",

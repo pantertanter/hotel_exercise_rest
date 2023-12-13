@@ -2,6 +2,7 @@ package dk.lyngby.dao.impl;
 
 import dk.lyngby.dao.IDao;
 import dk.lyngby.model.Picture;
+import dk.lyngby.model.User;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
@@ -38,8 +39,7 @@ public class PictureDao implements IDao<Picture, Integer> {
 
     @Override
     public Picture create(Picture picture) {
-        try (var em = emf.createEntityManager())
-        {
+        try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.persist(picture);
             em.getTransaction().commit();
@@ -68,6 +68,19 @@ public class PictureDao implements IDao<Picture, Integer> {
             var p = em.find(Picture.class, integer);
             em.remove(p);
             em.getTransaction().commit();
+        }
+    }
+
+    public Picture addPictureToUser(String userName, Picture picture ) {
+        try (var em = emf.createEntityManager())
+        {
+            em.getTransaction().begin();
+            User user = em.find(User.class, userName);
+            user.addPicture(picture);
+            em.persist(picture);
+            em.merge(user);
+            em.getTransaction().commit();
+            return picture;
         }
     }
 

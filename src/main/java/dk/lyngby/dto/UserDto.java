@@ -12,25 +12,25 @@ import java.util.Set;
 @Getter
 @ToString
 @NoArgsConstructor
-public class UserDTO {
+public class UserDto {
 
     private String username;
     private Set<String> roles;
 
-    public UserDTO(String username, String[] roles) {
+    public UserDto(String username, String[] roles) {
         this.username = username;
         this.roles = Set.of(roles);
     }
 
-    public UserDTO(User user) {
+    public UserDto(User user) {
         this.username = user.getUsername();
         this.roles = user.getRolesAsStrings();
     }
 
-    public static List<UserDTO> toUserDTOList(List<User> users) {
-        List<UserDTO> userDTOList =  new ArrayList<>();
+    public static List<UserDto> toUserDTOList(List<User> users) {
+        List<UserDto> userDTOList =  new ArrayList<>();
         for (User user : users) {
-            userDTOList.add(new UserDTO(user.getUsername(), user.getRolesAsStrings().toArray(new String[0])));
+            userDTOList.add(new UserDto(user.getUsername(), user.getRolesAsStrings().toArray(new String[0])));
         }
         return userDTOList;
 

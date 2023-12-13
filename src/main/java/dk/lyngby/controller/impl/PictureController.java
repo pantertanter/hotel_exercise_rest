@@ -5,7 +5,12 @@ import dk.lyngby.controller.IController;
 import dk.lyngby.dao.impl.PictureDao;
 import dk.lyngby.dto.HotelDto;
 import dk.lyngby.dto.PictureDto;
+import dk.lyngby.dto.UserDto;
+import dk.lyngby.exception.Message;
+import dk.lyngby.model.Hotel;
 import dk.lyngby.model.Picture;
+import dk.lyngby.model.Room;
+import dk.lyngby.model.User;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -47,7 +52,7 @@ public class PictureController implements IController<Picture, Integer> {
     @Override
     public void create(Context ctx) {
         // request
-        //Hotel jsonRequest = validateEntity(ctx);
+        String userName = ctx.pathParam("userName");
         Picture jsonRequest = ctx.bodyAsClass(Picture.class);
         // entity
         Picture picture = dao.create(jsonRequest);
@@ -79,6 +84,19 @@ public class PictureController implements IController<Picture, Integer> {
         dao.delete(id);
         // response
         ctx.res().setStatus(204);
+    }
+
+    public void addPictureToUser(Context ctx) {
+        // request
+        String userName = ctx.pathParam("userName");
+        Picture jsonRequest = ctx.bodyAsClass(Picture.class);
+        // entity
+        Picture picture = dao.addPictureToUser(userName, jsonRequest);
+        // dto
+        PictureDto pictureDto = new PictureDto(picture);
+        // response
+        ctx.res().setStatus(201);
+        ctx.json(pictureDto, PictureDto.class);
     }
 
     @Override

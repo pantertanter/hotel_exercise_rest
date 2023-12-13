@@ -1,6 +1,6 @@
 package dk.lyngby.controller.impl;
 
-import dk.lyngby.dto.UserDTO;
+import dk.lyngby.dto.UserDto;
 import dk.lyngby.exception.ApiException;
 import dk.lyngby.exception.AuthorizationException;
 import dk.lyngby.security.RouteRoles;
@@ -9,7 +9,6 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.security.RouteRole;
 
-import java.util.Objects;
 import java.util.Set;
 
 public class AccessManagerController
@@ -58,7 +57,7 @@ public class AccessManagerController
         try
         {
             String token = ctx.header("Authorization").split(" ")[1];
-            UserDTO userDTO = TOKEN_FACTORY.verifyToken(token);
+            UserDto userDTO = TOKEN_FACTORY.verifyToken(token);
             return userDTO.getRoles().stream().map(r -> RouteRoles.valueOf(r.toUpperCase())).toArray(RouteRole[]::new);
         }
         catch (NullPointerException e)

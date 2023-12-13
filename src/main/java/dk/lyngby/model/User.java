@@ -7,6 +7,8 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -35,6 +37,9 @@ public class User implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roleList = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<Picture> pictures = new HashSet<>();
+
     public User(String username, String userPassword) {
         this.username = username;
         this.userPassword = BCrypt.hashpw(userPassword, BCrypt.gensalt());
@@ -50,6 +55,7 @@ public class User implements Serializable {
         });
         return rolesAsStrings;
     }
+
     public boolean verifyPassword(String pw) {
         return BCrypt.checkpw(pw, userPassword);
     }
@@ -66,4 +72,8 @@ public class User implements Serializable {
         roleList.add(userRole);
     }
 
+    public void addPicture(Picture picture) {
+        pictures.add(picture);
+        picture.setUser(this);
+    }
 }

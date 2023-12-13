@@ -5,7 +5,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import dk.lyngby.dto.UserDTO;
+import dk.lyngby.dto.UserDto;
 import dk.lyngby.exception.AuthorizationException;
 
 import java.text.ParseException;
@@ -62,7 +62,7 @@ public class SignVerifyToken {
         return signedJWT;
     }
 
-    public UserDTO getJWTClaimsSet(JWTClaimsSet claimsSet) throws AuthorizationException {
+    public UserDto getJWTClaimsSet(JWTClaimsSet claimsSet) throws AuthorizationException {
 
         if (new Date().after(claimsSet.getExpirationTime()))
             throw new AuthorizationException(401, "Token is expired");
@@ -71,7 +71,7 @@ public class SignVerifyToken {
         String roles = claimsSet.getClaim("roles").toString();
         String[] rolesArray = roles.split(",");
 
-        return new UserDTO(username, rolesArray);
+        return new UserDto(username, rolesArray);
     }
 
 }

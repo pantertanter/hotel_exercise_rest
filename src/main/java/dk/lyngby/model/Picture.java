@@ -24,6 +24,11 @@ public class Picture {
     @Column(name = "picture_alt")
     private String alt;
 
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "user_name", referencedColumnName = "user_name")
+    private User user;
+
 
     public Picture(String url, String alt) {
         this.url = url;

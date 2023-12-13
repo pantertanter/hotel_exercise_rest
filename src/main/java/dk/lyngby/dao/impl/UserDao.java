@@ -2,8 +2,7 @@ package dk.lyngby.dao.impl;
 
 import dk.lyngby.dao.IDao;
 import dk.lyngby.exception.AuthorizationException;
-import dk.lyngby.model.Role;
-import dk.lyngby.model.User;
+import dk.lyngby.model.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -111,6 +110,18 @@ public class UserDao implements IDao<User, String> {
             User user = em.find(User.class, userName);
             em.remove(user);
             em.getTransaction().commit();
+        }
+    }
+
+    public User addPictureToUser(String userName, Picture picture ) {
+        try (var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            var user = em.find(User.class, userName);
+            user.addPicture(picture);
+            em.persist(picture);
+            User merge = em.merge(user);
+            em.getTransaction().commit();
+            return merge;
         }
     }
 

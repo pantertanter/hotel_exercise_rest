@@ -6,7 +6,7 @@ import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import dk.lyngby.config.ApplicationConfig;
-import dk.lyngby.dto.UserDTO;
+import dk.lyngby.dto.UserDto;
 import dk.lyngby.exception.ApiException;
 import dk.lyngby.exception.AuthorizationException;
 import lombok.AccessLevel;
@@ -96,7 +96,7 @@ public class TokenFactory {
         }
     }
 
-    public UserDTO verifyToken(String token) throws ApiException, AuthorizationException {
+    public UserDto verifyToken(String token) throws ApiException, AuthorizationException {
         try {
             SignedJWT signedJWT = signature.parseTokenAndVerify(token);
             JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();

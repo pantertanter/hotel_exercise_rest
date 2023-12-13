@@ -16,7 +16,7 @@ public class PictureRoute {
 
             return () -> {
                 path("/pictures", () -> {
-                    post("/", pictureController::create, RouteRoles.ADMIN, RouteRoles.MANAGER);
+                    post("/{userName}", pictureController::addPictureToUser, RouteRoles.ADMIN, RouteRoles.MANAGER);
                     get("/", pictureController::readAll, RouteRoles.ANYONE);
                     get("/{id}", pictureController::read, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
                     put("/{id}", pictureController::update, RouteRoles.ADMIN, RouteRoles.MANAGER);
