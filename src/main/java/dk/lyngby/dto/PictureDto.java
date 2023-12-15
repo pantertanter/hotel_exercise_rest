@@ -11,10 +11,13 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 public class PictureDto {
+
+    private Long id;
     private String url;
     private String alt;
 
     public PictureDto(Picture picture) {
+        this.id = picture.getId();
         this.url = picture.getUrl();
         this.alt = picture.getAlt();
     }

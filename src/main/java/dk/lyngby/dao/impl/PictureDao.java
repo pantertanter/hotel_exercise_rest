@@ -84,6 +84,37 @@ public class PictureDao implements IDao<Picture, Integer> {
         }
     }
 
+    public List<Picture> readAllPicturesFromUser(String userName) {
+        try (var em = emf.createEntityManager())
+        {
+            var query = em.createQuery("SELECT p FROM Picture p WHERE p.user.username = :userName", Picture.class);
+            query.setParameter("userName", userName);
+            return query.getResultList();
+        }
+    }
+
+
+
+    public String deletePictureFromUser(String userName, Integer pictureId) {
+        try (var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            // Find the picture
+            Picture picture = em.find(Picture.class, pictureId);
+
+            if (picture != null && picture.getUser() == null) {
+                // If the picture exists and is not associated with any user, delete it
+                em.remove(picture);
+                em.getTransaction().commit();
+                return "Picture with id: " + pictureId + " has been deleted from the database.";
+            } else {
+                // Picture is associated with a user or doesn't exist
+                em.getTransaction().commit();
+                return "Picture with id: " + pictureId + " is associated with a user or does not exist.";
+            }
+        }
+    }
+
     @Override
     public boolean validatePrimaryKey(Integer integer) {
         return false;

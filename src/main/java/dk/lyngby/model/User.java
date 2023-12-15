@@ -76,4 +76,9 @@ public class User implements Serializable {
         pictures.add(picture);
         picture.setUser(this);
     }
+
+    public void removePicture(Picture picture) {
+        pictures.remove(picture);
+        picture.setUser(null);
+    }
 }

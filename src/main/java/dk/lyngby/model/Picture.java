@@ -17,7 +17,7 @@ public class Picture {
     private Long id;
 
     @Setter
-    @Column(name = "picture_url", nullable = false, unique = true)
+    @Column(name = "picture_url", nullable = false)
     private String url;
 
     @Setter

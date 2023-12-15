@@ -99,6 +99,29 @@ public class PictureController implements IController<Picture, Integer> {
         ctx.json(pictureDto, PictureDto.class);
     }
 
+    public void readAllPicturesFromUser(Context ctx) {
+        // request
+        String userName = ctx.pathParam("userName");
+        // entity
+        List<Picture> pictures = dao.readAllPicturesFromUser(userName);
+        // dto
+        List<PictureDto> pictureDtos = PictureDto.toPictureDTOList(pictures);
+        // response
+        ctx.res().setStatus(200);
+        ctx.json(pictureDtos, PictureDto.class);
+    }
+
+    public void deletePictureFromUser(Context ctx) {
+        // request
+        String userName = ctx.pathParam("userName");
+        String id = ctx.pathParam("id");
+        int parsedId = Integer.parseInt(id);
+        // entity
+        dao.deletePictureFromUser(userName, parsedId);
+        // response
+        ctx.res().setStatus(204);
+    }
+
     @Override
     public boolean validatePrimaryKey(Integer integer) { return dao.validatePrimaryKey(integer); }
 
