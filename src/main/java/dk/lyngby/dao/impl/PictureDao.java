@@ -95,22 +95,22 @@ public class PictureDao implements IDao<Picture, Integer> {
 
 
 
-    public String deletePictureFromUser(String userName, Integer pictureId) {
+    public String deletePictureFromUser(Integer pictureId) {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
             // Find the picture
             Picture picture = em.find(Picture.class, pictureId);
 
-            if (picture != null && picture.getUser() == null) {
+            if (picture != null) {
                 // If the picture exists and is not associated with any user, delete it
                 em.remove(picture);
                 em.getTransaction().commit();
                 return "Picture with id: " + pictureId + " has been deleted from the database.";
             } else {
-                // Picture is associated with a user or doesn't exist
+                // If the picture does not exist, do not delete it
                 em.getTransaction().commit();
-                return "Picture with id: " + pictureId + " is associated with a user or does not exist.";
+                return "Picture with id: " + pictureId + " was not deleted.";
             }
         }
     }

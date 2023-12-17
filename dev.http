@@ -29,7 +29,7 @@ Accept: application/json
 Content-Type: application/json
 Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6ImFkbWluMSIsImV4cCI6MTcwMjY0NDk3Mywicm9sZXMiOiJhZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4xIn0.3QTeV6OsECf162tE6Uc38xc_iZTNoI4nGWgzoMq1TCU"
 ###
-DELETE http://localhost:7070/api/v1/pictures/admin1/13
+DELETE http://localhost:7070/api/v1/pictures/110
 Accept: application/json
 Content-Type: application/json
-Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6ImFkbWluMSIsImV4cCI6MTcwMjY0NDk3Mywicm9sZXMiOiJhZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4xIn0.3QTeV6OsECf162tE6Uc38xc_iZTNoI4nGWgzoMq1TCU"
+Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6ImFkbWluMSIsImV4cCI6MTcwMjgwODcyOCwicm9sZXMiOiJhZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4xIn0.RBrVOOCPfYNM5ec8n5znuHw7CjA2N3yCjOc-kl-FtWI"

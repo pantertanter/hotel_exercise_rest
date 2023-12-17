@@ -113,11 +113,10 @@ public class PictureController implements IController<Picture, Integer> {
 
     public void deletePictureFromUser(Context ctx) {
         // request
-        String userName = ctx.pathParam("userName");
         String id = ctx.pathParam("id");
         int parsedId = Integer.parseInt(id);
         // entity
-        dao.deletePictureFromUser(userName, parsedId);
+        dao.deletePictureFromUser(parsedId);
         // response
         ctx.res().setStatus(204);
     }
