@@ -5,12 +5,7 @@ import dk.lyngby.controller.IController;
 import dk.lyngby.dao.impl.PictureDao;
 import dk.lyngby.dto.HotelDto;
 import dk.lyngby.dto.PictureDto;
-import dk.lyngby.dto.UserDto;
-import dk.lyngby.exception.Message;
-import dk.lyngby.model.Hotel;
 import dk.lyngby.model.Picture;
-import dk.lyngby.model.Room;
-import dk.lyngby.model.User;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 

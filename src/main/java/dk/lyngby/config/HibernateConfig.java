@@ -99,6 +99,7 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Role.class);
         configuration.addAnnotatedClass(Picture.class);
+        configuration.addAnnotatedClass(Rating.class);
     }
 
     private static EntityManagerFactory getEntityManagerFactoryConfigDev() {

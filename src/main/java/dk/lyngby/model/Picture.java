@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @Entity
@@ -29,8 +32,21 @@ public class Picture {
     @JoinColumn(name = "user_name", referencedColumnName = "user_name")
     private User user;
 
+    @Setter
+    @Getter
+    @OneToMany(mappedBy = "picture")
+    private List<Rating> ratings;
+
     public Picture(String url, String alt) {
         this.url = url;
         this.alt = alt;
+        this.ratings = new ArrayList<>(); // Initialize ratings list
+    }
+
+    public void addRating(Rating rating) {
+        if (ratings == null) {
+            ratings = new ArrayList<>(); // Initialize ratings list if null
+        }
+        ratings.add(rating);
     }
 }
