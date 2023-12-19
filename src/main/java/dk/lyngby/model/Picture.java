@@ -29,7 +29,6 @@ public class Picture {
     @JoinColumn(name = "user_name", referencedColumnName = "user_name")
     private User user;
 
-
     public Picture(String url, String alt) {
         this.url = url;
         this.alt = alt;

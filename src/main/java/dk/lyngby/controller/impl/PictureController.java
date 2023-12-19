@@ -116,9 +116,12 @@ public class PictureController implements IController<Picture, Integer> {
         String id = ctx.pathParam("id");
         int parsedId = Integer.parseInt(id);
         // entity
-        dao.deletePictureFromUser(parsedId);
+        Picture picture = dao.deletePictureFromUser(parsedId);
+        // dto
+        PictureDto pictureDto = new PictureDto(picture);
         // response
-        ctx.res().setStatus(204);
+        ctx.res().setStatus(200);
+        ctx.json(pictureDto, PictureDto.class);
     }
 
     @Override
