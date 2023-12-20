@@ -1,17 +1,19 @@
 package dk.lyngby.dto;
 
 import dk.lyngby.model.Rating;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
+@Getter
 public class RatingDto {
 
-    private Long id;
     private int rating;
 
     public RatingDto(Rating rating) {
-        this.id = rating.getId();
         this.rating = rating.getRating();
     }
 

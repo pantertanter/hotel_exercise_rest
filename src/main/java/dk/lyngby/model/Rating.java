@@ -21,6 +21,7 @@ public class Rating {
     @Column(name = "rating", nullable = false)
     private Integer rating;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "picture_id", referencedColumnName = "picture_id")
     private Picture picture;

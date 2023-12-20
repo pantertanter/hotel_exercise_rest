@@ -48,5 +48,6 @@ public class Picture {
             ratings = new ArrayList<>(); // Initialize ratings list if null
         }
         ratings.add(rating);
+        rating.setPicture(this); // Set the Picture instance in the Rating entity
     }
 }

@@ -3,7 +3,6 @@ package dk.lyngby.dao.impl;
 import dk.lyngby.dao.IDao;
 import dk.lyngby.model.Picture;
 import dk.lyngby.model.Rating;
-import dk.lyngby.model.User;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
@@ -83,10 +82,19 @@ public class RatingDao implements IDao<Rating, Integer> {
             Picture picture = em.find(Picture.class, pictureId);
             Rating rating1 = new Rating(rating);
             picture.addRating(rating1);
-            em.persist(rating);
+            em.persist(rating1);
             em.merge(picture);
             em.getTransaction().commit();
             return rating1;
+        }
+    }
+
+    public List<Rating> getRatingsByPictureId(int pictureId) {
+        try (var em = emf.createEntityManager())
+        {
+            var query = em.createQuery("SELECT r FROM Rating r WHERE r.picture.id = :pictureId", Rating.class);
+            query.setParameter("pictureId", pictureId);
+            return query.getResultList();
         }
     }
 }
