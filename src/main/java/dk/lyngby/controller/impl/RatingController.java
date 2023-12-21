@@ -3,10 +3,7 @@ package dk.lyngby.controller.impl;
 import dk.lyngby.config.HibernateConfig;
 import dk.lyngby.controller.IController;
 import dk.lyngby.dao.impl.RatingDao;
-import dk.lyngby.dto.HotelDto;
-import dk.lyngby.dto.PictureDto;
 import dk.lyngby.dto.RatingDto;
-import dk.lyngby.model.Picture;
 import dk.lyngby.model.Rating;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
@@ -111,15 +108,21 @@ public class RatingController implements IController<Rating, Integer> {
         List<RatingDto> ratingDtos = RatingDto.toRatingDTOList(ratings);
         // response
         // for each ratingDto in ratingDtos summ all ratings and divide by ratingDtos.size()
-        int sum = 0;
-        for (RatingDto ratingDto : ratingDtos) {
-            sum += ratingDto.getRating();
+        if(ratingDtos.isEmpty()) {
+            ctx.res().setStatus(200);
         }
-        int average = sum / ratingDtos.size();
-        ctx.res().setHeader("Average rating", String.valueOf(average));
-        ctx.res().setStatus(200);
-        ctx.json(ratingDtos, RatingDto.class);
-    }
+        else {
+            int sum = 0;
+            for (RatingDto ratingDto : ratingDtos) {
+                sum += ratingDto.getRating();
+            }
+            int average = sum / ratingDtos.size();
+            ctx.res().setHeader("Average rating", String.valueOf(average));
+            ctx.res().setStatus(200);
+            ctx.json(ratingDtos, RatingDto.class);
+        }
+}
+
 
     @Override
     public boolean validatePrimaryKey(Integer integer) {
