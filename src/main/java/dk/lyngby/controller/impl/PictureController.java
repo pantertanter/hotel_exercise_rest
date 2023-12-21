@@ -3,7 +3,6 @@ package dk.lyngby.controller.impl;
 import dk.lyngby.config.HibernateConfig;
 import dk.lyngby.controller.IController;
 import dk.lyngby.dao.impl.PictureDao;
-import dk.lyngby.dto.HotelDto;
 import dk.lyngby.dto.PictureDto;
 import dk.lyngby.model.Picture;
 import io.javalin.http.Context;
@@ -30,7 +29,7 @@ public class PictureController implements IController<Picture, Integer> {
         PictureDto pictureDto = new PictureDto(picture);
         // response
         ctx.res().setStatus(200);
-        ctx.json(pictureDto, HotelDto.class);
+        ctx.json(pictureDto, PictureDto.class);
     }
 
     @Override

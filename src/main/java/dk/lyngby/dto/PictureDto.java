@@ -1,6 +1,5 @@
 package dk.lyngby.dto;
 
-import dk.lyngby.model.Hotel;
 import dk.lyngby.model.Picture;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

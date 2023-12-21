@@ -17,9 +17,6 @@ public class Routes {
 
     private final ExceptionController exceptionController = new ExceptionController();
     private int count = 0;
-
-    private final HotelRoute hotelRoute = new HotelRoute();
-    private final RoomRoute roomRoute = new RoomRoute();
     private final UserRoutes userRoutes = new UserRoutes();
 
     private final PictureRoute pictureRoute = new PictureRoute();
@@ -39,8 +36,6 @@ public class Routes {
 
             app.routes(() -> {
                 path("/", userRoutes.getRoutes());
-                path("/", hotelRoute.getRoutes());
-                path("/", roomRoute.getRoutes());
                 path("/", pictureRoute.getRoutes());
                 path("/", ratingRoute.getRoutes());
             });
