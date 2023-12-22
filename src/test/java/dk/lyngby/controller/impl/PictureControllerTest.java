@@ -86,6 +86,7 @@ class PictureControllerTest {
             em.createNativeQuery("ALTER SEQUENCE rating_rating_id_seq RESTART WITH 1").executeUpdate();
             em.createNativeQuery("ALTER SEQUENCE picture_picture_id_seq RESTART WITH 1").executeUpdate();
 
+            
             // Insert test data for hotels and rooms
             p1 = new Picture("src for p1", "alt for p1");
             p2 = new Picture("src for p2", "alt for p2");
