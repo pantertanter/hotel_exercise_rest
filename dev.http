@@ -8,15 +8,15 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "username": "admin1",
-  "password": "admin1"
+  "username": "user4",
+  "password": "user4"
 }
 
 ###
-POST http://localhost:7070/api/v1/pictures/admin1
+POST http://localhost:7070/api/v1/pictures/user4
 Accept: application/json
 Content-Type: application/json
-Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6ImFkbWluMSIsImV4cCI6MTcwMjk3MjA3Nywicm9sZXMiOiJhZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4xIn0.8FIukdX-45utQepUAn_a_vbCYbxj0nH7fJMa32-0Xkk"
+Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6InVzZXI0IiwiZXhwIjoxNzAzMjQwOTkzLCJyb2xlcyI6InVzZXIiLCJ1c2VybmFtZSI6InVzZXI0In0.WMjgz_lPYZU5Nxvwo6ljuzVC6em_jW8U3rpG7-M9nZ4"
 
 {
     "url": "url for picture2",
@@ -29,15 +29,15 @@ Accept: application/json
 Content-Type: application/json
 Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6ImFkbWluMSIsImV4cCI6MTcwMjY0NDk3Mywicm9sZXMiOiJhZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4xIn0.3QTeV6OsECf162tE6Uc38xc_iZTNoI4nGWgzoMq1TCU"
 ###
-DELETE http://localhost:7070/api/v1/pictures/119
+DELETE http://localhost:7070/api/v1/pictures/2
 Accept: application/json
 Content-Type: application/json
-Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6ImFkbWluMSIsImV4cCI6MTcwMjk3MTg3Mywicm9sZXMiOiJhZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4xIn0.7-VFNFW0c9x89Dwu08tquYPTVBKO_-0F2iitR4rEnpw"
+Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6InVzZXI0IiwiZXhwIjoxNzAzMjQwOTkzLCJyb2xlcyI6InVzZXIiLCJ1c2VybmFtZSI6InVzZXI0In0.WMjgz_lPYZU5Nxvwo6ljuzVC6em_jW8U3rpG7-M9nZ4"
 ###
-POST http://localhost:7070/api/v1/ratings/136/5
+POST http://localhost:7070/api/v1/ratings/2/3
 Accept: application/json
 Content-Type: application/json
-Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6ImFkbWluMSIsImV4cCI6MTcwMzA1Mzc4Nywicm9sZXMiOiJhZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4xIn0.xiUlE3-frtFkXkUPZHzXrY_c4-Bqzy1f0dTcrQLoUi8"
+Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6InVzZXI0IiwiZXhwIjoxNzAzMjQwOTkzLCJyb2xlcyI6InVzZXIiLCJ1c2VybmFtZSI6InVzZXI0In0.WMjgz_lPYZU5Nxvwo6ljuzVC6em_jW8U3rpG7-M9nZ4"
 ###
 GET http://localhost:7070/api/v1/ratings/136
 Accept: application/json

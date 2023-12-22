@@ -2,6 +2,7 @@ package dk.lyngby.dao.impl;
 
 import dk.lyngby.dao.IDao;
 import dk.lyngby.model.Picture;
+import dk.lyngby.model.Rating;
 import dk.lyngby.model.User;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -101,11 +102,29 @@ public class PictureDao implements IDao<Picture, Integer> {
 
             // Find the picture
             Picture picture = em.find(Picture.class, pictureId);
-            em.remove(picture);
-            em.getTransaction().commit();
+
+            if (picture != null) {
+                // Remove ratings associated with the picture
+                var removeRatingsQuery = em.createQuery("DELETE FROM Rating r WHERE r.picture = :picture");
+                removeRatingsQuery.setParameter("picture", picture);
+                removeRatingsQuery.executeUpdate();
+
+                // Remove picture from user's pictures
+                User user = picture.getUser(); // Assuming Picture has a reference to the User
+                if (user != null) {
+                    user.getPictures().remove(picture);
+                }
+
+                // Remove picture entity
+                em.remove(picture);
+                em.getTransaction().commit();
+            }
+
             return picture;
         }
     }
+
+
 
     @Override
     public boolean validatePrimaryKey(Integer integer) {

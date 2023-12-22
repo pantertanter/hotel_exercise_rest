@@ -18,13 +18,13 @@ public class Populate {
             Picture picture = new Picture("https://images.unsplash.com/photo-1701906268416-b461ec4caa34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHwyfHx8fHx8Mnx8MTcwMjI5MzE1Mnw&ixlib=rb-4.0.3&q=80&w=400", "the sun is setting over the clouds in the sky");
             Rating rating = new Rating(3);
             picture.addRating(rating);
-            User admin1 = new User("admin1", "admin1");
-            Role admin = new Role("admin");
-            admin1.addPicture(picture);
-            admin1.addRole(admin);
+            User user4 = new User("user4", "user4");
+            Role user = new Role("user");
+            user4.addPicture(picture);
+            user4.addRole(user);
             em.persist(rating);
-            em.persist(admin);
-            em.persist(admin1);
+            em.persist(user4);
+            em.persist(user);
             em.persist(picture);
             em.getTransaction().commit();
         }
