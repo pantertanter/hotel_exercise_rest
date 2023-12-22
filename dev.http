@@ -39,7 +39,7 @@ Accept: application/json
 Content-Type: application/json
 Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6InVzZXI0IiwiZXhwIjoxNzAzMjQwOTkzLCJyb2xlcyI6InVzZXIiLCJ1c2VybmFtZSI6InVzZXI0In0.WMjgz_lPYZU5Nxvwo6ljuzVC6em_jW8U3rpG7-M9nZ4"
 ###
-GET http://localhost:7070/api/v1/ratings/136
+GET http://localhost:7070/api/v1/ratings/9
 Accept: application/json
 Content-Type: application/json
-Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6ImFkbWluMSIsImV4cCI6MTcwMzE2NTg3Niwicm9sZXMiOiJhZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4xIn0.xsgvBRuSyswUGvXsU69jw-f2dL0LPiwGBlGqMC4l-0k"
+Authorization: "Baerer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjcGhidXNpbmVzcy5kayIsInN1YiI6InVzZXI0IiwiZXhwIjoxNzAzMjQ2MjQ3LCJyb2xlcyI6InVzZXIiLCJ1c2VybmFtZSI6InVzZXI0In0.UcuqpXjJmfKl3kRrsQ3FiWGnEeOLHwKNG1_xBLA6JOc"

@@ -98,30 +98,16 @@ public class RatingController implements IController<Rating, Integer> {
         ctx.json(ratingDto, RatingDto.class);
     }
 
-    public void getRatingsByPictureId(Context ctx) {
+    public void getRatingByPictureId(Context ctx) {
         // request
-        String picture_Id = ctx.pathParam("picture_id");
-        int picture_id_int = parseInt(picture_Id);
+        String pictureId = ctx.pathParam("picture_id");
+        int pictureIdInt = parseInt(pictureId);
         // entity
-        List<Rating> ratings = dao.getRatingsByPictureId(picture_id_int);
-        // dto
-        List<RatingDto> ratingDtos = RatingDto.toRatingDTOList(ratings);
+        double averageRating = dao.getRatingsByPictureId(pictureIdInt);
         // response
-        // for each ratingDto in ratingDtos summ all ratings and divide by ratingDtos.size()
-        if(ratingDtos.isEmpty()) {
-            ctx.res().setStatus(200);
-        }
-        else {
-            int sum = 0;
-            for (RatingDto ratingDto : ratingDtos) {
-                sum += ratingDto.getRating();
-            }
-            int average = sum / ratingDtos.size();
-            ctx.res().setHeader("Average rating", String.valueOf(average));
-            ctx.res().setStatus(200);
-            ctx.json(ratingDtos, RatingDto.class);
-        }
-}
+        ctx.json(averageRating, Double.class);
+        ctx.res().setStatus(200);
+    }
 
 
     @Override

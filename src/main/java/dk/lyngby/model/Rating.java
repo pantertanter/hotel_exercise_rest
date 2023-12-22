@@ -18,6 +18,7 @@ public class Rating {
     private Long id;
 
     @Setter
+    @Getter
     @Column(name = "rating", nullable = false)
     private Integer rating;
 

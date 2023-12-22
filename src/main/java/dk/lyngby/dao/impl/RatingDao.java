@@ -89,12 +89,23 @@ public class RatingDao implements IDao<Rating, Integer> {
         }
     }
 
-    public List<Rating> getRatingsByPictureId(int pictureId) {
-        try (var em = emf.createEntityManager())
-        {
+    public double getRatingsByPictureId(int pictureId) {
+        try (var em = emf.createEntityManager()) {
             var query = em.createQuery("SELECT r FROM Rating r WHERE r.picture.id = :pictureId", Rating.class);
             query.setParameter("pictureId", pictureId);
-            return query.getResultList();
+
+            List<Rating> ratings = query.getResultList();
+            if (ratings.isEmpty()) {
+                return 0.0; // Return 0 if the list is empty to avoid division by zero
+            }
+
+            int sum = 0;
+            for (Rating rating : ratings) {
+                sum += rating.getRating(); // Assuming getRating() retrieves the rating value
+            }
+
+            return (double) sum / ratings.size(); // Calculate and return the average rating
         }
     }
+
 }
