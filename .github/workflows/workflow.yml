@@ -1,7 +1,7 @@
 name: API JAVALIN WORKFLOW
 on:
   push:
-    branches: [ main ]
+    branches: [ mini_project ]
   pull_request:
     branches: [ main ]
 jobs:
