@@ -1,5 +1,6 @@
 package dk.lyngby.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Role implements Serializable {
     @Column(name = "role_name", length = 20)
     private String roleName;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "roleList")
     private List<User> userList;
 

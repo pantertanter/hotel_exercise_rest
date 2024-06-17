@@ -6,12 +6,12 @@ import dk.lyngby.config.HibernateConfig;
 import dk.lyngby.dao.impl.UserDao;
 import dk.lyngby.exception.ApiException;
 import dk.lyngby.exception.AuthorizationException;
-import dk.lyngby.model.Picture;
 import dk.lyngby.model.User;
 import dk.lyngby.security.TokenFactory;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.List;
 import java.util.Set;
 
 public class UserController {
@@ -67,6 +67,13 @@ public class UserController {
 
     private User findUserByName(String username) {
         return userDao.read(username);
+    }
+
+    public void getAllUsers(Context ctx) {
+        // get all users and display a status 200 ok if successful else display a status 500 internal server error
+        List<User> users = userDao.getAllUsers();
+        ctx.status(200);
+        ctx.json(users);
     }
 
 }

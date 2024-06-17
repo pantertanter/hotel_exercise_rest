@@ -5,8 +5,12 @@ import dk.lyngby.exception.AuthorizationException;
 import dk.lyngby.model.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.transaction.Transactional;
+
+import java.util.Collections;
 
 import java.util.List;
+import java.util.Set;
 
 public class UserDao implements IDao<User, String> {
 
@@ -78,13 +82,26 @@ public class UserDao implements IDao<User, String> {
 
     @Override
     public List<User> readAll() {
+        return null;
+    }
+
+    @Transactional
+    public List<User> getAllUsers() {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
             List<User> users = em.createQuery("SELECT u FROM User u", User.class).getResultList();
             em.getTransaction().commit();
+            // Access roleList and pictures within the same transaction
+            users.forEach(user -> {
+                user.getRoleList().size(); // Force initialization of roleList
+                user.getPictures().size(); // Force initialization of pictures
+                // Perform additional operations as needed
+            });
+
             return users;
         }
     }
+
 
     @Override
     public User create(User user) {

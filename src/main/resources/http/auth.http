@@ -21,7 +21,7 @@ Content-Type: application/json
 }
 
 ### Register user_manager/manager
-POST {{url}}/auth/register
+POST http://localhost:7070/api/v1/auth/register
 Content-Type: application/json
 
 {
@@ -33,7 +33,7 @@ Content-Type: application/json
 > {% client.global.set("token", response.body.token); %}
 
 ### Login as admin
-POST {{url}}/auth/login
+POST http://localhost:7070/api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -66,3 +66,8 @@ Content-Type: application/json
 > {% client.global.set("token", response.body.token); %}
 
 ###
+
+### Get all users
+GET http://localhost:7070/api/v1/auth/getAllUsers
+Authorization
+Bearer {{token}}

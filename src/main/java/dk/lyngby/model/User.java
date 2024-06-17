@@ -1,5 +1,6 @@
 package dk.lyngby.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,7 @@ public class User implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roleList = new LinkedHashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Picture> pictures = new HashSet<>();
 
