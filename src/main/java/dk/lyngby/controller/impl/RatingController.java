@@ -109,6 +109,15 @@ public class RatingController implements IController<Rating, Integer> {
         ctx.res().setStatus(200);
     }
 
+    public void deleteRatingsFromUserPictures(Context ctx) {
+        // request
+        int picture_id = Integer.parseInt(ctx.pathParam("picture_id"));
+        // entity
+        dao.deleteRatingsFromUserPictures(picture_id);
+        // response
+        ctx.res().setStatus(204);
+    }
+
 
     @Override
     public boolean validatePrimaryKey(Integer integer) {

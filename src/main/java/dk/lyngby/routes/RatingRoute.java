@@ -16,7 +16,7 @@ public class RatingRoute {
             path("/ratings", () -> {
                 post("/{picture_id}/{rating}", ratingController::addRatingToPicture, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
                 get("/{picture_id}", ratingController::getRatingByPictureId, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
-//                delete("/{id}", ratingController::deleteRatingFromPicture, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
+                delete("/{picture_id}", ratingController::deleteRatingsFromUserPictures, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
 
             });
         };

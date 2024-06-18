@@ -89,6 +89,7 @@ public class RatingDao implements IDao<Rating, Integer> {
         }
     }
 
+
     public double getRatingsByPictureId(int pictureId) {
         try (var em = emf.createEntityManager()) {
             var query = em.createQuery("SELECT r FROM Rating r WHERE r.picture.id = :pictureId", Rating.class);
@@ -103,8 +104,35 @@ public class RatingDao implements IDao<Rating, Integer> {
             for (Rating rating : ratings) {
                 sum += rating.getRating(); // Assuming getRating() retrieves the rating value
             }
-
             return (double) sum / ratings.size(); // Calculate and return the average rating
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0; // Return 0 in case of an exception to avoid breaking the application
+        }
+    }
+
+
+    public void deleteAllRatingsFromPicture(int pictureId) {
+        try (var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            Picture picture = em.find(Picture.class, pictureId);
+            picture.getRatings().clear();
+            em.getTransaction().commit();
+        }
+    }
+
+    public void deleteRatingsFromUserPictures(int pictureId) {
+        try (var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            int deletedCount = em.createQuery("DELETE FROM Rating r WHERE r.picture.id = :pictureId")
+                    .setParameter("pictureId", pictureId)
+                    .executeUpdate();
+
+            System.out.println("Deleted " + deletedCount + " ratings for picture: " + pictureId);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            // Handle exception, log error, rollback transaction if necessary
+            e.printStackTrace();
         }
     }
 

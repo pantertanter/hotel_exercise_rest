@@ -43,6 +43,15 @@ public class PictureController implements IController<Picture, Integer> {
         ctx.json(pictureDtos, PictureDto.class);
     }
 
+    public void deleteAllPicturesFromUser(Context ctx) {
+        // request
+        String userName = ctx.pathParam("userName");
+        // entity
+        dao.deleteAllPicturesFromUser(userName);
+        // response
+        ctx.res().setStatus(204);
+    }
+
     @Override
     public void create(Context ctx) {
         // request

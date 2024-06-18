@@ -94,7 +94,23 @@ public class PictureDao implements IDao<Picture, Integer> {
         }
     }
 
+    public void deleteAllPicturesFromUser(String userName) {
+        try (var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
 
+            // Corrected JPQL query with parameter binding
+            int deletedCount = em.createQuery("DELETE FROM Picture p WHERE p.user.username = :userName")
+                    .setParameter("userName", userName)
+                    .executeUpdate();
+
+            System.out.println("Deleted " + deletedCount + " pictures for user: " + userName);
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            // Handle exception, log error, rollback transaction if necessary
+            e.printStackTrace();
+        }
+    }
 
     public Picture deletePictureFromUser(Integer pictureId) {
         try (var em = emf.createEntityManager()) {

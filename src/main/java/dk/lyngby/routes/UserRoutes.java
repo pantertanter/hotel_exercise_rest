@@ -16,6 +16,7 @@ public class UserRoutes {
                 post("/login", userController::login, RouteRoles.ANYONE);
                 post("/register", userController::register, RouteRoles.ANYONE);
                 get("/getAllUsers", userController::getAllUsers, RouteRoles.ADMIN);
+                delete("/delete/{id}", userController::delete, RouteRoles.ADMIN);
             });
         };
     }

@@ -3,9 +3,11 @@ package dk.lyngby.controller.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.lyngby.config.HibernateConfig;
+import dk.lyngby.dao.impl.PictureDao;
 import dk.lyngby.dao.impl.UserDao;
 import dk.lyngby.exception.ApiException;
 import dk.lyngby.exception.AuthorizationException;
+import dk.lyngby.model.Picture;
 import dk.lyngby.model.User;
 import dk.lyngby.security.TokenFactory;
 import io.javalin.http.Context;
@@ -17,11 +19,15 @@ import java.util.Set;
 public class UserController {
 
     private final UserDao userDao;
+
+    private final PictureDao pictureDao;
+
     private final TokenFactory tokenFactory = TokenFactory.getInstance();
 
     public UserController() {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
         userDao = UserDao.getInstance(emf);
+        pictureDao = PictureDao.getInstance(emf);
     }
 
     public void login(Context ctx) throws ApiException, AuthorizationException {
@@ -74,6 +80,16 @@ public class UserController {
         List<User> users = userDao.getAllUsers();
         ctx.status(200);
         ctx.json(users);
+    }
+
+    public void delete(Context ctx) {
+        // get the id of the user to be deleted
+
+        String id = ctx.pathParam("id");
+        // delete the user and display a status 200 ok if successful else display a status 500 internal server error
+        pictureDao.deleteAllPicturesFromUser(id);
+        userDao.delete(id);
+        ctx.status(200);
     }
 
 }
