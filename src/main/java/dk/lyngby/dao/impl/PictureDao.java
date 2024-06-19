@@ -137,10 +137,12 @@ public class PictureDao implements IDao<Picture, Integer> {
             }
 
             return picture;
+        } catch (Exception e) {
+            // Handle exceptions, log errors, or throw custom exceptions as needed
+            e.printStackTrace();
+            return null;
         }
     }
-
-
 
     @Override
     public boolean validatePrimaryKey(Integer integer) {
