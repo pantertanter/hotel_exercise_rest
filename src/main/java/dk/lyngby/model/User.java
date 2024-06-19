@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.Serial;
@@ -36,6 +37,7 @@ public class User implements Serializable {
             @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
             @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
     @ManyToMany(fetch = FetchType.EAGER)
+    @Setter
     private Set<Role> roleList = new LinkedHashSet<>();
 
     @JsonIgnore

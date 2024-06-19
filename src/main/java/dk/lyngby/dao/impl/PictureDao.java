@@ -63,6 +63,11 @@ public class PictureDao implements IDao<Picture, Integer> {
     }
 
     @Override
+    public User update(User user) {
+        return null;
+    }
+
+    @Override
     public void delete(Integer integer) {
         try(var em = emf.createEntityManager()) {
             em.getTransaction().begin();

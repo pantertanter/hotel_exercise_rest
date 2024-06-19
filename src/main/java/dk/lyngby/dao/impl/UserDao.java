@@ -7,10 +7,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.transaction.Transactional;
 
-import java.util.Collections;
-
 import java.util.List;
-import java.util.Set;
 
 public class UserDao implements IDao<User, String> {
 
@@ -109,12 +106,16 @@ public class UserDao implements IDao<User, String> {
     }
 
     @Override
-    public User update(String userName, User user) {
+    public User update(String s, User user) {
+        return null;
+    }
+
+    @Override
+    public User update(User user) {
+        // Update user roles
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            User userToUpdate = em.find(User.class, userName);
-            userToUpdate.setUsername(user.getUsername());
-            userToUpdate.setUserPassword(user.getUserPassword());
+            User userToUpdate = em.merge(user);
             em.getTransaction().commit();
             return userToUpdate;
         }
@@ -149,6 +150,15 @@ public class UserDao implements IDao<User, String> {
             User user = em.find(User.class, userName);
             em.getTransaction().commit();
             return user != null;
+        }
+    }
+
+    public User findUserByName(String userName) {
+        try(var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            User user = em.find(User.class, userName);
+            em.getTransaction().commit();
+            return user;
         }
     }
 }

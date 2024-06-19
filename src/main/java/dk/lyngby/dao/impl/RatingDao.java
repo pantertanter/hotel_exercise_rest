@@ -3,6 +3,7 @@ package dk.lyngby.dao.impl;
 import dk.lyngby.dao.IDao;
 import dk.lyngby.model.Picture;
 import dk.lyngby.model.Rating;
+import dk.lyngby.model.User;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
@@ -58,6 +59,11 @@ public class RatingDao implements IDao<Rating, Integer> {
             em.getTransaction().commit();
             return r;
         }
+    }
+
+    @Override
+    public User update(User user) {
+        return null;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -23,6 +24,8 @@ public class Role implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "role_name", length = 20)
+    @Getter
+    @Setter
     private String roleName;
 
     @JsonIgnore
@@ -45,4 +48,6 @@ public class Role implements Serializable {
     public int hashCode() {
         return Objects.hash(roleName);
     }
+
+
 }

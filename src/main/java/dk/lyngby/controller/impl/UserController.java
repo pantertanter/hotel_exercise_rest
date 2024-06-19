@@ -1,5 +1,6 @@
 package dk.lyngby.controller.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.lyngby.config.HibernateConfig;
@@ -8,11 +9,14 @@ import dk.lyngby.dao.impl.UserDao;
 import dk.lyngby.exception.ApiException;
 import dk.lyngby.exception.AuthorizationException;
 import dk.lyngby.model.Picture;
+import dk.lyngby.model.Role;
 import dk.lyngby.model.User;
 import dk.lyngby.security.TokenFactory;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -92,4 +96,61 @@ public class UserController {
         ctx.status(200);
     }
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public static class RoleUpdateRequest {
+        private Set<String> roles;
+
+        public Set<String> getRoles() {
+            return roles;
+        }
+
+        public void setRoles(Set<String> roles) {
+            this.roles = roles;
+        }
+    }
+
+    public void update(Context ctx) {
+        try {
+            String userName = ctx.pathParam("user_name");
+
+            // Read JSON payload from request body
+            String jsonPayload = ctx.body();
+            System.out.println("JSON Payload: " + jsonPayload);
+
+            // Deserialize JSON payload into RoleUpdateRequest
+            RoleUpdateRequest roleUpdateRequest = objectMapper.readValue(jsonPayload, RoleUpdateRequest.class);
+            System.out.println("Deserialized RoleUpdateRequest: " + roleUpdateRequest);
+
+            // Convert role names to Set<Role>
+            Set<Role> rolesSet = new HashSet<>();
+            for (String roleName : roleUpdateRequest.getRoles()) {
+                rolesSet.add(new Role(roleName));
+            }
+            System.out.println("Converted Roles Set:" + " " + rolesSet);
+
+                    // Find user by username
+                    User user = userDao.findUserByName(userName);
+
+            if (user != null) {
+                // Update user roles
+                user.getRoleList().clear(); // Clear existing roles if needed
+                user.getRoleList().addAll(rolesSet); // Add new roles
+
+                // Persist updated user
+                userDao.update(user);
+
+                // Respond with updated user
+                ctx.status(200);
+                ctx.json(user);
+            } else {
+                ctx.status(404);
+                ctx.result("User not found");
+            }
+        } catch (Exception e) {
+            ctx.status(500);
+            ctx.result("Failed to update user roles");
+            e.printStackTrace();
+        }
+    }
 }
