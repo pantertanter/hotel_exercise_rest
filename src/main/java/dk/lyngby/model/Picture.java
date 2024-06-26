@@ -28,6 +28,22 @@ public class Picture {
     private String alt;
 
     @Setter
+    @Column(name = "photographer_name")
+    private String pName;
+
+    @Setter
+    @Column(name = "photographer_userName")
+    private String pUserName;
+
+    @Setter
+    @Column(name = "p_user_link")
+    private String pUserLink;
+
+    @Setter
+    @Column(name = "p_down_link")
+    private String pDownLink;
+
+    @Setter
     @ManyToOne
     @JoinColumn(name = "user_name", referencedColumnName = "user_name")
     private User user;
@@ -37,9 +53,13 @@ public class Picture {
     @OneToMany(mappedBy = "picture")
     private List<Rating> ratings;
 
-    public Picture(String url, String alt) {
+    public Picture(String url, String alt, String pName, String pUserName, String pUserLink, String pDownLink) {
         this.url = url;
         this.alt = alt;
+        this.pName = pName;
+        this.pUserName = pUserName;
+        this.pUserLink = pUserLink;
+        this.pDownLink = pDownLink;
         this.ratings = new ArrayList<>(); // Initialize ratings list
     }
 

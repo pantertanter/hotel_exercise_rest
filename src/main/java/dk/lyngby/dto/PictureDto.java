@@ -14,11 +14,19 @@ public class PictureDto {
     private Long id;
     private String url;
     private String alt;
+    private String pName;
+    private String pUserName;
+    private String pUserLink;
+    private String pDownLink;
 
     public PictureDto(Picture picture) {
         this.id = picture.getId();
         this.url = picture.getUrl();
         this.alt = picture.getAlt();
+        this.pName = picture.getPName();
+        this.pUserName = picture.getPUserName();
+        this.pUserLink = picture.getPUserLink();
+        this.pDownLink = picture.getPDownLink();
     }
 
     public static List<PictureDto> toPictureDTOList(List<Picture> pictures) {
