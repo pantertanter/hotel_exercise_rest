@@ -81,12 +81,13 @@ public class RatingDao implements IDao<Rating, Integer> {
         return false;
     }
 
-    public Rating addRatingToPicture(int pictureId, Integer rating ) {
+    public Rating addRatingToPicture(int pictureId, Integer rating, String user) {
         try (var em = emf.createEntityManager())
         {
             em.getTransaction().begin();
             Picture picture = em.find(Picture.class, pictureId);
-            Rating rating1 = new Rating(rating);
+            User user1 = em.find(User.class, user);
+            Rating rating1 = new Rating(rating, user1);
             picture.addRating(rating1);
             em.persist(rating1);
             em.merge(picture);

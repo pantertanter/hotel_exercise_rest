@@ -5,6 +5,7 @@ import dk.lyngby.controller.IController;
 import dk.lyngby.dao.impl.RatingDao;
 import dk.lyngby.dto.RatingDto;
 import dk.lyngby.model.Rating;
+import dk.lyngby.model.User;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -87,10 +88,11 @@ public class RatingController implements IController<Rating, Integer> {
         // request
         String picture_Id = ctx.pathParam("picture_id");
         String rating = ctx.pathParam("rating");
+        String user_name_for_rating = ctx.pathParam("user_name_for_rating");
         int picture_id_int = parseInt(picture_Id);
         int rating_integer = Integer.parseInt(rating);
         // entity
-        Rating rating_response = dao.addRatingToPicture(picture_id_int, rating_integer);
+        Rating rating_response = dao.addRatingToPicture(picture_id_int, rating_integer, user_name_for_rating);
         // dto
         RatingDto ratingDto = new RatingDto(rating_response);
         // response

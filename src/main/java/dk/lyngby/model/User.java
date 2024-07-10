@@ -9,10 +9,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -43,6 +40,15 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Picture> pictures = new HashSet<>();
+
+    @Setter
+    @Getter
+    @OneToMany(mappedBy = "user")
+    private List<Rating> ratings;
+
+    public User(String username) {
+        this.username = username;
+    }
 
     public User(String username, String userPassword) {
         this.username = username;
@@ -79,6 +85,14 @@ public class User implements Serializable {
     public void addPicture(Picture picture) {
         pictures.add(picture);
         picture.setUser(this);
+    }
+
+    public void addRating(Rating rating) {
+        if (ratings == null) {
+            ratings = new ArrayList<>(); // Initialize ratings list if null
+        }
+        ratings.add(rating);
+        rating.setUser(this); // Set the Picture instance in the Rating entity
     }
 
     public void removePicture(Picture picture) {
