@@ -92,13 +92,19 @@ public class RatingController implements IController<Rating, Integer> {
         int picture_id_int = parseInt(picture_Id);
         int rating_integer = Integer.parseInt(rating);
         // entity
-        Rating rating_response = dao.addRatingToPicture(picture_id_int, rating_integer, user_name_for_rating);
-        // dto
-        RatingDto ratingDto = new RatingDto(rating_response);
-        // response
-        ctx.res().setStatus(201);
-        ctx.json(ratingDto, RatingDto.class);
+        if (dao.getHasBeenRated(picture_id_int, user_name_for_rating)) {
+            ctx.res().setStatus(409);
+            ctx.json("User already rated this image", String.class);
+        } else {
+            Rating rating_response = dao.addRatingToPicture(picture_id_int, rating_integer, user_name_for_rating);
+            // dto
+            RatingDto ratingDto = new RatingDto(rating_response);
+            // response
+            ctx.res().setStatus(201);
+            ctx.json(ratingDto, RatingDto.class);
+        }
     }
+
 
     public void getRatingByPictureId(Context ctx) {
         // request

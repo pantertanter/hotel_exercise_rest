@@ -5,6 +5,7 @@ import dk.lyngby.model.Picture;
 import dk.lyngby.model.Rating;
 import dk.lyngby.model.User;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
 
 import java.util.List;
 
@@ -81,18 +82,31 @@ public class RatingDao implements IDao<Rating, Integer> {
         return false;
     }
 
-    public Rating addRatingToPicture(int pictureId, Integer rating, String user) {
-        try (var em = emf.createEntityManager())
-        {
+    public Rating addRatingToPicture(int pictureId, Integer rating, String userName) {
+        try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Picture picture = em.find(Picture.class, pictureId);
-            User user1 = em.find(User.class, user);
-            Rating rating1 = new Rating(rating, user1);
+            User user = em.find(User.class, userName);
+            Rating rating1 = new Rating(rating, picture, user);
             picture.addRating(rating1);
             em.persist(rating1);
             em.merge(picture);
             em.getTransaction().commit();
             return rating1;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public boolean getHasBeenRated(int pictureId, String userName) {
+        try (var em = emf.createEntityManager()) {
+
+            Query query = em.createQuery(
+                    "SELECT r FROM Rating r WHERE r.picture.id = :pictureId AND r.user.username = :userName"
+            );
+            query.setParameter("pictureId", pictureId);
+            query.setParameter("userName", userName);
+            return !query.getResultList().isEmpty();
         }
     }
 
