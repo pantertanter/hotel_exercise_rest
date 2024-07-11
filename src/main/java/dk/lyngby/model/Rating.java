@@ -21,7 +21,7 @@ public class Rating {
     private Integer rating;
 
     @ManyToOne
-    @JoinColumn(name = "picture_id", referencedColumnName = "picture_id")
+    @JoinColumn(name = "picture_alt", referencedColumnName = "picture_alt")
     private Picture picture;
 
     @ManyToOne

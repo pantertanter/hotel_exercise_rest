@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 @Getter
 public class PictureDto {
 
-    private Long id;
     private String url;
     private String alt;
     private String pName;
@@ -20,7 +19,6 @@ public class PictureDto {
     private String pDownLink;
 
     public PictureDto(Picture picture) {
-        this.id = picture.getId();
         this.url = picture.getUrl();
         this.alt = picture.getAlt();
         this.pName = picture.getPName();

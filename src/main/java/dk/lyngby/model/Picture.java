@@ -15,17 +15,13 @@ import java.util.List;
 public class Picture {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "picture_id", nullable = false, unique = true)
-    private Long id;
+    @Setter
+    @Column(name = "picture_alt")
+    private String alt;
 
     @Setter
     @Column(name = "picture_url", nullable = false)
     private String url;
-
-    @Setter
-    @Column(name = "picture_alt")
-    private String alt;
 
     @Setter
     @Column(name = "photographer_name")
