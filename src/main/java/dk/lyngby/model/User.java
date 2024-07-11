@@ -41,6 +41,7 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Picture> pictures = new HashSet<>();
 
+    @JsonIgnore
     @Setter
     @Getter
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
