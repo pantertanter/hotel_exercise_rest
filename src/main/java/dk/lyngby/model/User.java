@@ -43,7 +43,7 @@ public class User implements Serializable {
 
     @Setter
     @Getter
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Rating> ratings;
 
     public User(String username) {
