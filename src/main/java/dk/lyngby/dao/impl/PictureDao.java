@@ -78,15 +78,29 @@ public class PictureDao implements IDao<Picture, Integer> {
     }
 
     public Picture addPictureToUser(String userName, Picture picture ) {
-        try (var em = emf.createEntityManager())
-        {
-            em.getTransaction().begin();
-            User user = em.find(User.class, userName);
-            user.addPicture(picture);
-            em.persist(picture);
-            em.merge(user);
-            em.getTransaction().commit();
-            return picture;
+        if (pictureExists(picture.getAlt(), userName)) {
+            throw new IllegalArgumentException("Picture with alt " + picture.getAlt() + " already exists for user " + userName);
+        } else {
+            try (var em = emf.createEntityManager()) {
+                em.getTransaction().begin();
+                User user = em.find(User.class, userName);
+                user.addPicture(picture);
+                em.persist(picture);
+                em.merge(user);
+                em.getTransaction().commit();
+                return picture;
+            }
+        }
+    }
+
+
+
+    public boolean pictureExists(String alt, String userName) {
+        try (var em = emf.createEntityManager()) {
+            var query = em.createQuery("SELECT COUNT(p) FROM Picture p WHERE p.alt = :alt AND p.user.username = :userName", Long.class);
+            query.setParameter("alt", alt);
+            query.setParameter("userName", userName);
+            return (long) query.getSingleResult() > 0;
         }
     }
 
