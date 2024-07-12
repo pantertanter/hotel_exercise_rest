@@ -8,6 +8,7 @@ import dk.lyngby.model.Rating;
 import dk.lyngby.model.User;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
+import io.javalin.http.Context;
 
 import java.util.List;
 
@@ -85,33 +86,51 @@ public class RatingController implements IController<Rating, Integer> {
     }
 
     public void addRatingToPicture(Context ctx) {
-        // request
-        String picture_Id = ctx.pathParam("picture_id");
-        String rating = ctx.pathParam("rating");
-        String user_name_for_rating = ctx.pathParam("user_name_for_rating");
-        int picture_id_int = parseInt(picture_Id);
-        int rating_integer = Integer.parseInt(rating);
-        // entity
-        if (dao.getHasBeenRated(picture_id_int, user_name_for_rating)) {
-            ctx.res().setStatus(409);
-            ctx.json("User already rated this image", String.class);
-        } else {
-            Rating rating_response = dao.addRatingToPicture(picture_id_int, rating_integer, user_name_for_rating);
-            // dto
-            RatingDto ratingDto = new RatingDto(rating_response);
-            // response
-            ctx.res().setStatus(201);
-            ctx.json(ratingDto, RatingDto.class);
+        try {
+            // Request parameters
+            String pictureAlt = ctx.pathParam("picture_alt");
+            String ratingParam = ctx.pathParam("rating");
+            String userNameForRating = ctx.pathParam("user_name_for_rating");
+
+            // Convert rating to integer
+            int ratingInteger;
+            try {
+                ratingInteger = Integer.parseInt(ratingParam);
+            } catch (NumberFormatException e) {
+                ctx.status(400);
+                ctx.json("Invalid rating format. Must be an integer.");
+                return;
+            }
+
+            // Check if the user has already rated the picture
+            if (dao.getHasBeenRated(pictureAlt, userNameForRating)) {
+                ctx.status(409);
+                ctx.json("User has already rated this image.");
+            } else {
+                // Add rating to picture
+                Rating ratingResponse = dao.addRatingToPicture(pictureAlt, ratingInteger, userNameForRating);
+
+                // Create DTO
+                RatingDto ratingDto = new RatingDto(ratingResponse);
+
+                // Send response
+                ctx.status(201);
+                ctx.json(ratingDto);
+            }
+        } catch (Exception e) {
+            ctx.status(500);
+            ctx.json("An error occurred while adding the rating.");
+            e.printStackTrace();
         }
     }
 
 
+
     public void getRatingByPictureId(Context ctx) {
         // request
-        String pictureId = ctx.pathParam("picture_id");
-        int pictureIdInt = parseInt(pictureId);
+        String picture_alt = ctx.pathParam("picture_alt");
         // entity
-        double averageRating = dao.getRatingsByPictureId(pictureIdInt);
+        double averageRating = dao.getRatingsByPictureId(picture_alt);
         // response
         ctx.json(averageRating, Double.class);
         ctx.res().setStatus(200);

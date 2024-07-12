@@ -19,7 +19,7 @@ public class PictureRoute {
                     get("/{userName}", pictureController::readAllPicturesFromUser, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
                     delete("/{userName}", pictureController::deleteAllPicturesFromUser, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
                     get("/", pictureController::readAll, RouteRoles.ANYONE);
-                    delete("/picture/{id}", pictureController::deletePictureFromUser, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
+                    delete("/picture/{alt}", pictureController::deletePictureFromUser, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
                 });
             };
         }

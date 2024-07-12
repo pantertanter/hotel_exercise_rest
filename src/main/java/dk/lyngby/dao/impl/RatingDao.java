@@ -82,10 +82,10 @@ public class RatingDao implements IDao<Rating, Integer> {
         return false;
     }
 
-    public Rating addRatingToPicture(int pictureId, Integer rating, String userName) {
+    public Rating addRatingToPicture(String picture_url, Integer rating, String userName) {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            Picture picture = em.find(Picture.class, pictureId);
+            Picture picture = em.find(Picture.class, picture_url);
             User user = em.find(User.class, userName);
             Rating rating1 = new Rating(rating, picture, user);
             picture.addRating(rating1);
@@ -98,23 +98,23 @@ public class RatingDao implements IDao<Rating, Integer> {
         }
     }
 
-    public boolean getHasBeenRated(int pictureId, String userName) {
+    public boolean getHasBeenRated(String picture_alt, String userName) {
         try (var em = emf.createEntityManager()) {
 
             Query query = em.createQuery(
-                    "SELECT r FROM Rating r WHERE r.picture.id = :pictureId AND r.user.username = :userName"
+                    "SELECT r FROM Rating r WHERE r.picture.alt = :picture_alt AND r.user.username = :userName"
             );
-            query.setParameter("pictureId", pictureId);
+            query.setParameter("picture_alt", picture_alt);
             query.setParameter("userName", userName);
             return !query.getResultList().isEmpty();
         }
     }
 
 
-    public double getRatingsByPictureId(int pictureId) {
+    public double getRatingsByPictureId(String picture_alt) {
         try (var em = emf.createEntityManager()) {
-            var query = em.createQuery("SELECT r FROM Rating r WHERE r.picture.id = :pictureId", Rating.class);
-            query.setParameter("pictureId", pictureId);
+            var query = em.createQuery("SELECT r FROM Rating r WHERE r.picture.alt = :picture_alt", Rating.class);
+            query.setParameter("picture_alt", picture_alt);
 
             List<Rating> ratings = query.getResultList();
             if (ratings.isEmpty()) {
