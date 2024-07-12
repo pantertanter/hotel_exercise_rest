@@ -15,8 +15,12 @@ import java.util.List;
 public class Picture {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generate the ID
+    @Column(name = "id", updatable = false, nullable = false)
+    private Long id;
+
     @Setter
-    @Column(name = "picture_alt")
+    @Column(name = "picture_alt", unique = false, nullable = false)
     private String alt;
 
     @Setter

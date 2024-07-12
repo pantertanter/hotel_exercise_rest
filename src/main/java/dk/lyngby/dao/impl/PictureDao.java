@@ -117,13 +117,15 @@ public class PictureDao implements IDao<Picture, Integer> {
         }
     }
 
-    public Picture deletePictureFromUser(String pictureAlt) {
+    public Picture deletePictureFromUser(String picture_alt, String userName) {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
-            // Find the picture
-            Picture picture = em.find(Picture.class, pictureAlt);
-
+            // Find the picture entity by alt and user name
+            var picture = em.createQuery("SELECT p FROM Picture p WHERE p.alt = :alt AND p.user.username = :userName", Picture.class)
+                    .setParameter("alt", picture_alt)
+                    .setParameter("userName", userName)
+                    .getSingleResult();
             if (picture != null) {
                 // Remove ratings associated with the picture
                 var removeRatingsQuery = em.createQuery("DELETE FROM Rating r WHERE r.picture = :picture");
