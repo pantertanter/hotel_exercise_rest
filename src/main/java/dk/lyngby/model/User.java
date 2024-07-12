@@ -38,14 +38,12 @@ public class User implements Serializable {
     private Set<Role> roleList = new LinkedHashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Picture> pictures = new HashSet<>();
 
     @JsonIgnore
-    @Setter
-    @Getter
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Rating> ratings;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
 
     public User(String username) {
         this.username = username;
@@ -61,9 +59,7 @@ public class User implements Serializable {
             return null;
         }
         Set<String> rolesAsStrings = new LinkedHashSet<>();
-        roleList.forEach((role) -> {
-            rolesAsStrings.add(role.getRoleName());
-        });
+        roleList.forEach(role -> rolesAsStrings.add(role.getRoleName()));
         return rolesAsStrings;
     }
 
@@ -89,15 +85,34 @@ public class User implements Serializable {
     }
 
     public void addRating(Rating rating) {
-        if (ratings == null) {
-            ratings = new ArrayList<>(); // Initialize ratings list if null
-        }
         ratings.add(rating);
-        rating.setUser(this); // Set the Picture instance in the Rating entity
+        rating.setUser(this);
     }
 
     public void removePicture(Picture picture) {
         pictures.remove(picture);
         picture.setUser(null);
+    }
+
+    public void setPictures(Set<Picture> newPictures) {
+        this.pictures.clear();
+        for (Picture picture : newPictures) {
+            addPicture(picture);
+        }
+    }
+
+    public Set<Picture> getPictures() {
+        return Collections.unmodifiableSet(pictures);
+    }
+
+    public void setRatings(List<Rating> newRatings) {
+        this.ratings.clear();
+        for (Rating rating : newRatings) {
+            addRating(rating);
+        }
+    }
+
+    public List<Rating> getRatings() {
+        return Collections.unmodifiableList(ratings);
     }
 }

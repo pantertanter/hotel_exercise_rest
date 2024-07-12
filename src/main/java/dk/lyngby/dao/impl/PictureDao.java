@@ -5,6 +5,7 @@ import dk.lyngby.model.Picture;
 import dk.lyngby.model.Rating;
 import dk.lyngby.model.User;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 
@@ -131,37 +132,27 @@ public class PictureDao implements IDao<Picture, Integer> {
         }
     }
 
-    public Picture deletePictureFromUser(String picture_alt, String userName) {
+    public Picture deletePictureFromUser(String alt, String userName) {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
-
-            // Find the picture entity by alt and user name
-            var picture = em.createQuery("SELECT p FROM Picture p WHERE p.alt = :alt AND p.user.username = :userName", Picture.class)
-                    .setParameter("alt", picture_alt)
+            Picture picture = em.createQuery("SELECT p FROM Picture p WHERE p.alt = :alt AND p.user.username = :userName", Picture.class)
+                    .setParameter("alt", alt)
                     .setParameter("userName", userName)
                     .getSingleResult();
+            Rating rating = em.createQuery("SELECT r FROM Rating r WHERE r.picture.alt = :alt AND r.user.username = :userName", Rating.class)
+                    .setParameter("alt", alt)
+                    .setParameter("userName", userName)
+                    .getSingleResult();
+
             if (picture != null) {
-                // Remove ratings associated with the picture
-                var removeRatingsQuery = em.createQuery("DELETE FROM Rating r WHERE r.picture = :picture");
-                removeRatingsQuery.setParameter("picture", picture);
-                removeRatingsQuery.executeUpdate();
-
-                // Remove picture from user's pictures
-                User user = picture.getUser(); // Assuming Picture has a reference to the User
-                if (user != null) {
-                    user.getPictures().remove(picture);
-                }
-
-                // Remove picture entity
                 em.remove(picture);
+                em.remove(rating);
                 em.getTransaction().commit();
+                return picture;
+            } else {
+                // Handle the case where the picture is not found
+                throw new EntityNotFoundException("Picture not found with alt: " + alt + " and userName: " + userName);
             }
-
-            return picture;
-        } catch (Exception e) {
-            // Handle exceptions, log errors, or throw custom exceptions as needed
-            e.printStackTrace();
-            return null;
         }
     }
 
