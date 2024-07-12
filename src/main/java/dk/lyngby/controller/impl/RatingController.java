@@ -88,7 +88,7 @@ public class RatingController implements IController<Rating, Integer> {
     public void addRatingToPicture(Context ctx) {
         try {
             // Request parameters
-            String pictureAlt = ctx.pathParam("picture_alt");
+            String picture_alt = ctx.pathParam("picture_alt");
             String ratingParam = ctx.pathParam("rating");
             String userNameForRating = ctx.pathParam("user_name_for_rating");
 
@@ -103,12 +103,12 @@ public class RatingController implements IController<Rating, Integer> {
             }
 
             // Check if the user has already rated the picture
-            if (dao.getHasBeenRated(pictureAlt, userNameForRating)) {
+            if (dao.getHasBeenRated(picture_alt, userNameForRating)) {
                 ctx.status(409);
                 ctx.json("User has already rated this image.");
             } else {
                 // Add rating to picture
-                Rating ratingResponse = dao.addRatingToPicture(pictureAlt, ratingInteger, userNameForRating);
+                Rating ratingResponse = dao.addRatingToPicture(picture_alt, ratingInteger, userNameForRating);
 
                 // Create DTO
                 RatingDto ratingDto = new RatingDto(ratingResponse);

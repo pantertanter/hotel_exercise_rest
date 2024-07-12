@@ -82,10 +82,17 @@ public class RatingDao implements IDao<Rating, Integer> {
         return false;
     }
 
-    public Rating addRatingToPicture(String picture_url, Integer rating, String userName) {
+    public Rating addRatingToPicture(String picture_alt, Integer rating, String userName) {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            Picture picture = em.find(Picture.class, picture_url);
+            // find picture from picture_alt and userName
+            Query query = em.createQuery(
+                    "SELECT p FROM Picture p WHERE p.alt = :picture_alt AND p.user.username = :userName"
+            );
+            query.setParameter("picture_alt", picture_alt);
+            query.setParameter("userName", userName);
+            Picture picture = (Picture) query.getSingleResult();
+//            Picture picture = em.find(Picture.class, picture_alt);
             User user = em.find(User.class, userName);
             Rating rating1 = new Rating(rating, picture, user);
             picture.addRating(rating1);
