@@ -9,6 +9,7 @@ import dk.lyngby.model.User;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import io.javalin.http.Context;
+import java.util.Collections;
 
 import java.util.List;
 
@@ -124,16 +125,27 @@ public class RatingController implements IController<Rating, Integer> {
         }
     }
 
-
-
     public void getRatingByPictureId(Context ctx) {
-        // request
-        String picture_alt = ctx.pathParam("picture_alt");
-        // entity
-        double averageRating = dao.getRatingsByPictureId(picture_alt);
-        // response
-        ctx.json(averageRating, Double.class);
-        ctx.res().setStatus(200);
+        try {
+            // Get picture_alt from path parameter
+            String picture_alt = ctx.pathParam("picture_alt");
+
+            // Get average ratings from DAO
+            List<Double> averageRating = dao.getRatingsByPictureId(picture_alt);
+
+            // Check if averageRating list is empty (no ratings found)
+            if (averageRating.isEmpty()) {
+                ctx.status(404); // Not Found
+                ctx.json(Collections.singletonMap("error", "No ratings found for picture: " + picture_alt));
+            } else {
+                ctx.status(200); // OK
+                ctx.json(averageRating);
+            }
+        } catch (Exception e) {
+            ctx.status(500); // Server Error
+            ctx.json(Collections.singletonMap("error", "Internal Server Error"));
+            e.printStackTrace(); // Log the exception for debugging
+        }
     }
 
     public void deleteRatingsFromUserPictures(Context ctx) {

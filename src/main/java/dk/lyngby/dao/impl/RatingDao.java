@@ -5,8 +5,11 @@ import dk.lyngby.model.Picture;
 import dk.lyngby.model.Rating;
 import dk.lyngby.model.User;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
+import java.util.Collections;
 import java.util.List;
 
 public class RatingDao implements IDao<Rating, Integer> {
@@ -107,37 +110,41 @@ public class RatingDao implements IDao<Rating, Integer> {
 
     public boolean getHasBeenRated(String picture_alt, String userName) {
         try (var em = emf.createEntityManager()) {
-
-            Query query = em.createQuery(
-                    "SELECT r FROM Rating r WHERE r.picture.alt = :picture_alt AND r.user.username = :userName"
+            TypedQuery<Long> query = em.createQuery(
+                    "SELECT COUNT(r) FROM Rating r WHERE r.picture.alt = :picture_alt AND r.user.username = :userName",
+                    Long.class
             );
             query.setParameter("picture_alt", picture_alt);
             query.setParameter("userName", userName);
-            return !query.getResultList().isEmpty();
-        }
-    }
 
-
-    public double getRatingsByPictureId(String picture_alt) {
-        try (var em = emf.createEntityManager()) {
-            var query = em.createQuery("SELECT r FROM Rating r WHERE r.picture.alt = :picture_alt", Rating.class);
-            query.setParameter("picture_alt", picture_alt);
-
-            List<Rating> ratings = query.getResultList();
-            if (ratings.isEmpty()) {
-                return 0.0; // Return 0 if the list is empty to avoid division by zero
-            }
-
-            int sum = 0;
-            for (Rating rating : ratings) {
-                sum += rating.getRating(); // Assuming getRating() retrieves the rating value
-            }
-            return (double) sum / ratings.size(); // Calculate and return the average rating
+            Long count = query.getSingleResult();
+            return count > 0;
+        } catch (NoResultException e) {
+            return false; // Handle case where no results are found
         } catch (Exception e) {
             e.printStackTrace();
-            return 0.0; // Return 0 in case of an exception to avoid breaking the application
+            // Handle other exceptions here
+            return false;
         }
     }
+
+
+
+    public List<Double> getRatingsByPictureId(String picture_alt) {
+        try (var em = emf.createEntityManager()) {
+            TypedQuery<Double> query = em.createQuery(
+                    "SELECT AVG(r.rating) FROM Rating r WHERE r.picture.alt = :picture_alt GROUP BY r.picture.alt",
+                    Double.class
+            );
+            query.setParameter("picture_alt", picture_alt);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList(); // Handle exception gracefully
+        }
+    }
+
 
 
     public void deleteAllRatingsFromPicture(int pictureId) {
