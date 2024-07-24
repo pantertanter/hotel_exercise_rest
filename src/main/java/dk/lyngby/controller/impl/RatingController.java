@@ -150,9 +150,9 @@ public class RatingController implements IController<Rating, Integer> {
 
     public void deleteRatingsFromUserPictures(Context ctx) {
         // request
-        int picture_id = Integer.parseInt(ctx.pathParam("picture_id"));
+        String userName = ctx.pathParam("userName");
         // entity
-        dao.deleteRatingsFromUserPictures(picture_id);
+        dao.deleteRatingsFromUserPictures(userName);
         // response
         ctx.res().setStatus(204);
     }

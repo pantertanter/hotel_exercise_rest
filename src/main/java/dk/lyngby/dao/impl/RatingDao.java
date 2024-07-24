@@ -156,14 +156,14 @@ public class RatingDao implements IDao<Rating, Integer> {
         }
     }
 
-    public void deleteRatingsFromUserPictures(int pictureId) {
+    public void deleteRatingsFromUserPictures(String userName) {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            int deletedCount = em.createQuery("DELETE FROM Rating r WHERE r.picture.id = :pictureId")
-                    .setParameter("pictureId", pictureId)
+            int deletedCount = em.createQuery("DELETE FROM Rating r WHERE r.user.username = :userName")
+                    .setParameter("userName", userName)
                     .executeUpdate();
 
-            System.out.println("Deleted " + deletedCount + " ratings for picture: " + pictureId);
+            System.out.println("Deleted " + deletedCount + " ratings for user: " + userName);
             em.getTransaction().commit();
         } catch (Exception e) {
             // Handle exception, log error, rollback transaction if necessary
