@@ -17,6 +17,7 @@ public class RatingRoute {
                 post("/{picture_alt}/{rating}/{user_name_for_rating}", ratingController::addRatingToPicture, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
                 get("/{picture_alt}", ratingController::getRatingByPictureId, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
                 delete("/{userName}", ratingController::deleteRatingsFromUserPictures, RouteRoles.ADMIN, RouteRoles.MANAGER);
+                delete("/rating/{picture_alt}/{user_name}", ratingController::deleteRatingFromPicture, RouteRoles.ADMIN);
 
             });
         };

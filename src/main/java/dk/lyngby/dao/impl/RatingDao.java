@@ -28,16 +28,14 @@ public class RatingDao implements IDao<Rating, Integer> {
 
     @Override
     public Rating read(Integer integer) {
-        try (var em = emf.createEntityManager())
-        {
+        try (var em = emf.createEntityManager()) {
             return em.find(Rating.class, integer);
         }
     }
 
     @Override
     public List<Rating> readAll() {
-        try (var em = emf.createEntityManager())
-        {
+        try (var em = emf.createEntityManager()) {
             var query = em.createQuery("SELECT r FROM Rating r", Rating.class);
             return query.getResultList();
         }
@@ -55,7 +53,7 @@ public class RatingDao implements IDao<Rating, Integer> {
 
     @Override
     public Rating update(Integer integer, Rating rating) {
-        try(var em = emf.createEntityManager()) {
+        try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
             var r = em.find(Rating.class, integer);
@@ -72,7 +70,7 @@ public class RatingDao implements IDao<Rating, Integer> {
 
     @Override
     public void delete(Integer integer) {
-        try(var em = emf.createEntityManager()) {
+        try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
             var r = em.find(Rating.class, integer);
             em.remove(r);
@@ -129,7 +127,6 @@ public class RatingDao implements IDao<Rating, Integer> {
     }
 
 
-
     public List<Double> getRatingsByPictureId(String picture_alt) {
         try (var em = emf.createEntityManager()) {
             TypedQuery<Double> query = em.createQuery(
@@ -144,7 +141,6 @@ public class RatingDao implements IDao<Rating, Integer> {
             return Collections.emptyList(); // Handle exception gracefully
         }
     }
-
 
 
     public void deleteAllRatingsFromPicture(int pictureId) {
@@ -171,4 +167,22 @@ public class RatingDao implements IDao<Rating, Integer> {
         }
     }
 
+    public void deleteRatingFromPicture(String picture_alt, String userName) {
+        try (var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            Query query = em.createQuery(
+                    "DELETE FROM Rating r WHERE r.picture.alt = :picture_alt AND r.user.username = :userName"
+            );
+            query.setParameter("picture_alt", picture_alt);
+            query.setParameter("userName", userName);
+            int deletedCount = query.executeUpdate();
+
+            System.out.println("Deleted " + deletedCount + " ratings for picture: " + picture_alt + " and user: " + userName);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            // Handle exception, log error, rollback transaction if necessary
+            e.printStackTrace();
+
+        }
+    }
 }
