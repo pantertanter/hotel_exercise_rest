@@ -15,11 +15,11 @@ public class PictureRoute {
 
             return () -> {
                 path("/pictures", () -> {
-                    post("/{userName}", pictureController::addPictureToUser, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
-                    get("/{userName}", pictureController::readAllPicturesFromUser, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
-                    delete("/{userName}", pictureController::deleteAllPicturesFromUser, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
+                    post("/{userName}", pictureController::addPictureToUser, RouteRoles.USER, RouteRoles.ADMIN);
+                    get("/{userName}", pictureController::readAllPicturesFromUser, RouteRoles.USER, RouteRoles.ADMIN);
+                    delete("/{userName}", pictureController::deleteAllPicturesFromUser, RouteRoles.USER, RouteRoles.ADMIN);
                     get("/", pictureController::readAll, RouteRoles.ANYONE);
-                    delete("/picture/{alt}/{userName}", pictureController::deletePictureFromUser, RouteRoles.USER, RouteRoles.ADMIN, RouteRoles.MANAGER);
+                    delete("/picture/{alt}/{userName}", pictureController::deletePictureFromUser, RouteRoles.USER, RouteRoles.ADMIN);
                 });
             };
         }

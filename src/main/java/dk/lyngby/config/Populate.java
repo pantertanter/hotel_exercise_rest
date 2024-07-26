@@ -26,12 +26,16 @@ public class Populate {
             Picture picture_5 = new Picture("https://images.unsplash.com/photo-1721023672487-906b07479bff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHwyfHx8fHx8Mnx8MTcyMTExNTQzOXw&ixlib=rb-4.0.3&q=80&w=400", "A wooden table topped with a vase filled with flowers", "Parker Coffman", "lowmurmer", "https://unsplash.com/@lowmurmer", "https://api.unsplash.com/photos/jGDqRxc_xQ8/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHwyfHx8fHx8Mnx8MTcyMTExNTQzOXw");
             Picture picture_6 = new Picture("https://images.unsplash.com/photo-1720887237185-6b8d5c01005d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHw4fHx8fHx8Mnx8MTcyMTExNTQzOXw&ixlib=rb-4.0.3&q=80&w=400", "A couple of people that are looking in a window", "James Chan", "jvmesc_", "https://unsplash.com/@jvmesc_", "https://api.unsplash.com/photos/KWocLB1EHIc/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHw4fHx8fHx8Mnx8MTcyMTExNTQzOXw");
 
-            User user_1 = new User("user_1", "user_1");
-            User user_2 = new User("user_2", "user_2");
-
-            User admin = new User("admin", "admin");
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
+
+            User user_1 = new User("user_1", "user_1");
+            User user_2 = new User("user_2", "user_2");
+            User admin = new User("admin", "admin");
+
+            user_1.addRole(userRole);
+            user_2.addRole(userRole);
+            admin.addRole(adminRole);
 
             user_1.addPicture(picture_1);
             user_1.addPicture(picture_2);
@@ -39,10 +43,6 @@ public class Populate {
             user_2.addPicture(picture_4);
             admin.addPicture(picture_5);
             admin.addPicture(picture_6);
-
-            user_1.addRole(userRole);
-            user_2.addRole(userRole);
-            admin.addRole(adminRole);
 
             Rating rating_1 = new Rating(3, user_1);
             Rating rating_2 = new Rating(4, user_1);

@@ -71,7 +71,7 @@ public class UserController {
         return isCreate ? userDao.registerUser(username, password, role) : userDao.getVerifiedUser(username, password);
     }
 
-    private String getToken(String username, Set<String> userRoles) throws ApiException {
+    public String getToken(String username, Set<String> userRoles) throws ApiException {
         return tokenFactory.createToken(username, userRoles);
     }
 
