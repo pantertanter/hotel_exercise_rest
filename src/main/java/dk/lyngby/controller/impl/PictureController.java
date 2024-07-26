@@ -123,7 +123,7 @@ public class PictureController implements IController<Picture, Integer> {
         // dto
         PictureDto pictureDto = new PictureDto(picture);
         // response
-        ctx.res().setStatus(200);
+        ctx.res().setStatus(204);
         ctx.json(pictureDto, PictureDto.class);
     }
 

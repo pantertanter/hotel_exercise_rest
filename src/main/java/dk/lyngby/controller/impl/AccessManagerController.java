@@ -52,19 +52,36 @@ public class AccessManagerController
         }
     }
 
-    private RouteRole[] getUserRole(Context ctx) throws AuthorizationException, ApiException
-    {
-        try
-        {
-            String token = ctx.header("Authorization").split(" ")[1];
+    private RouteRole[] getUserRole(Context ctx) throws AuthorizationException, ApiException {
+        try {
+            String authHeader = ctx.header("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                throw new ApiException(401, "Missing or malformed authorization header");
+            }
+
+            String[] parts = authHeader.split(" ");
+            if (parts.length != 2) {
+                throw new ApiException(401, "Invalid authorization header format");
+            }
+
+            String token = parts[1];
             UserDto userDTO = TOKEN_FACTORY.verifyToken(token);
-            return userDTO.getRoles().stream().map(r -> RouteRoles.valueOf(r.toUpperCase())).toArray(RouteRole[]::new);
-        }
-        catch (NullPointerException e)
-        {
+
+            if (userDTO.getRoles() == null || userDTO.getRoles().isEmpty()) {
+                throw new ApiException(403, "User has no roles assigned");
+            }
+
+            // Log the token and roles for debugging
+            System.out.println("Token: " + token);
+            System.out.println("User roles: " + userDTO.getRoles());
+
+            return userDTO.getRoles().stream()
+                    .map(r -> RouteRoles.valueOf(r.toUpperCase()))
+                    .toArray(RouteRole[]::new);
+        } catch (NullPointerException e) {
             throw new ApiException(401, "Invalid token");
+        } catch (IllegalArgumentException e) {
+            throw new ApiException(400, "Invalid role in token");
         }
-
     }
-
 }
