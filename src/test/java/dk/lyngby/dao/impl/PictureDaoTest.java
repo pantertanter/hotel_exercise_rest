@@ -43,26 +43,9 @@ class PictureDaoTest {
         app = Javalin.create();
         ApplicationConfig.startServer(app, 7777);
         RestAssured.baseURI = BASE_URL;
-    }
 
-    @BeforeEach
-    void setUp() {
         try (EntityManager em = emfTest.createEntityManager()) {
             em.getTransaction().begin();
-
-            // Delete all existing records from tables
-            em.createQuery("DELETE FROM Rating").executeUpdate();
-            em.createQuery("DELETE FROM Picture").executeUpdate();
-            em.createQuery("DELETE FROM User").executeUpdate();
-            em.createQuery("DELETE FROM Role").executeUpdate();
-
-            // Persist new data
-            Picture picture_1 = new Picture("https://images.unsplash.com/photo-1611288870280-4a322b8ec7ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfHNlYXJjaHwxfHx3cmVuY2h8ZW58MHx8fHwxNzIxMTE1NDUyfDA&ixlib=rb-4.0.3&q=80&w=400", "silver steel tool on white surface", "Recha Oktaviani", "rechaoktaviani", "https://unsplash.com/@rechaoktaviani", "https://api.unsplash.com/photos/t__61ap00Mc/download?ixid=M3w1Mzk1MTR8MHwxfHNlYXJjaHwxfHx3cmVuY2h8ZW58MHx8fHwxNzIxMTE1NDUyfDA");
-            Picture picture_2 = new Picture("https://images.unsplash.com/photo-1720719908968-f6bcf72b8ce2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHw0fHx8fHx8Mnx8MTcyMDgwNDg5MHw&ixlib=rb-4.0.3&q=80&w=400", "A red building with red balconies and a clock", "Pascal Bullan", "jetztabertempo", "https://unsplash.com/@jetztabertempo", "https://api.unsplash.com/photos/WsdsKOTNEA0/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHw0fHx8fHx8Mnx8MTcyMDgwNDg5MHw");
-            Picture picture_3 = new Picture("https://images.unsplash.com/photo-1720766595377-b413ce3a6478?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHw1fHx8fHx8Mnx8MTcyMDgwNDg5MHw&ixlib=rb-4.0.3&q=80&w=400", "A person standing in front of a bush with white flowers", "Max Ovcharenko", "chestmax", "https://unsplash.com/@chestmax", "https://api.unsplash.com/photos/PH-kwn9zkf8/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHw1fHx8fHx8Mnx8MTcyMDgwNDg5MHw");
-            Picture picture_4 = new Picture("https://images.unsplash.com/photo-1720766255393-60ca5199def4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHw2fHx8fHx8Mnx8MTcyMDgwNDg5MHw&ixlib=rb-4.0.3&q=80&w=400", "Three pink roses in a vase on a black background", "ISO10", "isoten", "https://unsplash.com/@isoten", "https://api.unsplash.com/photos/MJJ8p9b2AvY/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHw2fHx8fHx8Mnx8MTcyMDgwNDg5MHw");
-            Picture picture_5 = new Picture("https://images.unsplash.com/photo-1721023672487-906b07479bff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHwyfHx8fHx8Mnx8MTcyMTExNTQzOXw&ixlib=rb-4.0.3&q=80&w=400", "A wooden table topped with a vase filled with flowers", "Parker Coffman", "lowmurmer", "https://unsplash.com/@lowmurmer", "https://api.unsplash.com/photos/jGDqRxc_xQ8/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHwyfHx8fHx8Mnx8MTcyMTExNTQzOXw");
-            Picture picture_6 = new Picture("https://images.unsplash.com/photo-1720887237185-6b8d5c01005d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHw4fHx8fHx8Mnx8MTcyMTExNTQzOXw&ixlib=rb-4.0.3&q=80&w=400", "A couple of people that are looking in a window", "James Chan", "jvmesc_", "https://unsplash.com/@jvmesc_", "https://api.unsplash.com/photos/KWocLB1EHIc/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHw4fHx8fHx8Mnx8MTcyMTExNTQzOXw");
 
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
@@ -74,6 +57,34 @@ class PictureDaoTest {
             user_1.addRole(userRole);
             user_2.addRole(userRole);
             admin.addRole(adminRole);
+
+            em.persist(user_1);
+            em.persist(user_2);
+            em.persist(admin);
+
+            em.persist(userRole);
+            em.persist(adminRole);
+
+            em.getTransaction().commit();
+        }
+    }
+
+    @BeforeEach
+    void setUp() {
+        try (EntityManager em = emfTest.createEntityManager()) {
+            em.getTransaction().begin();
+
+            // Delete all existing records from tables
+            em.createQuery("DELETE FROM Rating").executeUpdate();
+            em.createQuery("DELETE FROM Picture").executeUpdate();
+
+            // Persist new data
+            Picture picture_1 = new Picture("https://images.unsplash.com/photo-1611288870280-4a322b8ec7ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfHNlYXJjaHwxfHx3cmVuY2h8ZW58MHx8fHwxNzIxMTE1NDUyfDA&ixlib=rb-4.0.3&q=80&w=400", "silver steel tool on white surface", "Recha Oktaviani", "rechaoktaviani", "https://unsplash.com/@rechaoktaviani", "https://api.unsplash.com/photos/t__61ap00Mc/download?ixid=M3w1Mzk1MTR8MHwxfHNlYXJjaHwxfHx3cmVuY2h8ZW58MHx8fHwxNzIxMTE1NDUyfDA");
+            Picture picture_2 = new Picture("https://images.unsplash.com/photo-1720719908968-f6bcf72b8ce2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHw0fHx8fHx8Mnx8MTcyMDgwNDg5MHw&ixlib=rb-4.0.3&q=80&w=400", "A red building with red balconies and a clock", "Pascal Bullan", "jetztabertempo", "https://unsplash.com/@jetztabertempo", "https://api.unsplash.com/photos/WsdsKOTNEA0/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHw0fHx8fHx8Mnx8MTcyMDgwNDg5MHw");
+            Picture picture_3 = new Picture("https://images.unsplash.com/photo-1720766595377-b413ce3a6478?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHw1fHx8fHx8Mnx8MTcyMDgwNDg5MHw&ixlib=rb-4.0.3&q=80&w=400", "A person standing in front of a bush with white flowers", "Max Ovcharenko", "chestmax", "https://unsplash.com/@chestmax", "https://api.unsplash.com/photos/PH-kwn9zkf8/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHw1fHx8fHx8Mnx8MTcyMDgwNDg5MHw");
+            Picture picture_4 = new Picture("https://images.unsplash.com/photo-1720766255393-60ca5199def4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHw2fHx8fHx8Mnx8MTcyMDgwNDg5MHw&ixlib=rb-4.0.3&q=80&w=400", "Three pink roses in a vase on a black background", "ISO10", "isoten", "https://unsplash.com/@isoten", "https://api.unsplash.com/photos/MJJ8p9b2AvY/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHw2fHx8fHx8Mnx8MTcyMDgwNDg5MHw");
+            Picture picture_5 = new Picture("https://images.unsplash.com/photo-1721023672487-906b07479bff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHwyfHx8fHx8Mnx8MTcyMTExNTQzOXw&ixlib=rb-4.0.3&q=80&w=400", "A wooden table topped with a vase filled with flowers", "Parker Coffman", "lowmurmer", "https://unsplash.com/@lowmurmer", "https://api.unsplash.com/photos/jGDqRxc_xQ8/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHwyfHx8fHx8Mnx8MTcyMTExNTQzOXw");
+            Picture picture_6 = new Picture("https://images.unsplash.com/photo-1720887237185-6b8d5c01005d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHw4fHx8fHx8Mnx8MTcyMTExNTQzOXw&ixlib=rb-4.0.3&q=80&w=400", "A couple of people that are looking in a window", "James Chan", "jvmesc_", "https://unsplash.com/@jvmesc_", "https://api.unsplash.com/photos/KWocLB1EHIc/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHw4fHx8fHx8Mnx8MTcyMTExNTQzOXw");
 
             user_1.addPicture(picture_1);
             user_1.addPicture(picture_2);
@@ -103,13 +114,6 @@ class PictureDaoTest {
             em.persist(rating_5);
             em.persist(rating_6);
 
-            em.persist(user_1);
-            em.persist(user_2);
-            em.persist(admin);
-
-            em.persist(userRole);
-            em.persist(adminRole);
-
             em.persist(picture_1);
             em.persist(picture_2);
             em.persist(picture_3);
@@ -127,6 +131,15 @@ class PictureDaoTest {
 
     @AfterAll
     static void tearDown() {
+        try (EntityManager em = emfTest.createEntityManager()) {
+            em.getTransaction().begin();
+            em.createQuery("DELETE FROM Rating").executeUpdate();
+            em.createQuery("DELETE FROM Picture").executeUpdate();
+            em.createQuery("DELETE FROM User").executeUpdate();
+            em.createQuery("DELETE FROM Role").executeUpdate();
+            em.getTransaction().commit();
+        }
+
         HibernateConfig.setTest(false);
         ApplicationConfig.stopServer(app);
     }
@@ -165,8 +178,10 @@ class PictureDaoTest {
                 .when()
                 .get(BASE_URL + "/pictures/" + user_1.getUsername())
                 .then()
-                .statusCode(200);
+                .statusCode(200)
+                .body("size()", equalTo(2));  // Assuming user_1 has 2 pictures
     }
+
 
     @Test
     void deleteAllPicturesFromUser() {
