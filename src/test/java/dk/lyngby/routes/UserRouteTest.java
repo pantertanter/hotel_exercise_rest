@@ -1,4 +1,4 @@
-package dk.lyngby.dao.impl;
+package dk.lyngby.routes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.lyngby.config.ApplicationConfig;
@@ -11,21 +11,14 @@ import io.javalin.Javalin;
 import io.restassured.RestAssured;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
 
-class PictureDaoTest {
+class UserRouteTest {
 
     private static Javalin app;
     private static final String BASE_URL = "http://localhost:7777/api/v1";
-    private static PictureDao pictureDao;
     private static EntityManagerFactory emfTest;
     private static String adminToken;
     private static String user_1Token;
@@ -33,13 +26,11 @@ class PictureDaoTest {
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     private static User user_1, user_2, admin;
-    private static Role userRole, adminRole;
 
     @BeforeAll
     static void beforeAll() {
         HibernateConfig.setTest(true);
         emfTest = HibernateConfig.getEntityManagerFactory();
-        pictureDao = new PictureDao();
         app = Javalin.create();
         ApplicationConfig.startServer(app, 7777);
         RestAssured.baseURI = BASE_URL;
@@ -145,62 +136,30 @@ class PictureDaoTest {
     }
 
     @Test
-    void addPictureToUser() {
-        Picture picture = new Picture(
-                "https://images.unsplash.com/photo-1720887237185-6b8d5c01005d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Mzk1MTR8MHwxfGFsbHw4fHx8fHx8Mnx8MTcyMTExNTQzOXw&ixlib=rb-4.0.3&q=80&w=400",
-                "A couple of people that are looking in a window",
-                "James Chan",
-                "jvmesc_",
-                "https://unsplash.com/@jvmesc_",
-                "https://api.unsplash.com/photos/KWocLB1EHIc/download?ixid=M3w1Mzk1MTR8MHwxfGFsbHw4fHx8fHx8Mnx8MTcyMTExNTQzOXw"
-        );
+    void login() {
 
-        try {
-            String pictureJson = objectMapper.writeValueAsString(picture);
-
-            given()
-                    .header("Authorization", "Bearer " + user_1Token)
-                    .contentType("application/json")
-                    .body(pictureJson)
-                    .when()
-                    .post(BASE_URL + "/pictures/" + user_1.getUsername())
-                    .then()
-                    .statusCode(201);
-        } catch (Exception e) {
-            fail("Failed to serialize picture to JSON: " + e.getMessage());
-        }
     }
 
     @Test
-    void readAllPicturesFromUser() {
+    void register() {
         given()
-                .header("Authorization", "Bearer " + user_1Token)
+                .contentType("application/json")
+                .body("{\"username\": \"user_3\", \"password\": \"user_3\", \"role\": \"user\"}")
                 .when()
-                .get(BASE_URL + "/pictures/" + user_1.getUsername())
+                .post(BASE_URL + "/auth/register")
                 .then()
-                .statusCode(200)
-                .body("size()", equalTo(2));  // Assuming user_1 has 2 pictures
-    }
-
-
-    @Test
-    void deleteAllPicturesFromUser() {
-        given()
-                .header("Authorization", "Bearer " + user_2Token)
-                .when()
-                .delete(BASE_URL + "/pictures/" + user_2.getUsername())
-                .then()
-                .statusCode(204);
+                .statusCode(201);
     }
 
     @Test
-    void deletePictureFromUser() {
+    void getAllUsers() {
         given()
-                .header("Authorization", "Bearer " + user_2Token)
+                .header("Authorization", "Bearer " + adminToken)
+                .contentType("application/json")
                 .when()
-                .delete(BASE_URL + "/pictures/picture/A person standing in front of a bush with white flowers/" + user_2.getUsername())
+                .get(BASE_URL + "/auth/getAllUsers")
                 .then()
-                .statusCode(204);
+                .statusCode(200);
     }
 
     private static String getToken(String username, String password) {

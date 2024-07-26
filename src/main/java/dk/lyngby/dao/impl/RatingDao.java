@@ -93,7 +93,6 @@ public class RatingDao implements IDao<Rating, Integer> {
             query.setParameter("picture_alt", picture_alt);
             query.setParameter("userName", userName);
             Picture picture = (Picture) query.getSingleResult();
-//            Picture picture = em.find(Picture.class, picture_alt);
             User user = em.find(User.class, userName);
             Rating rating1 = new Rating(rating, picture, user);
             picture.addRating(rating1);
