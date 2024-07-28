@@ -137,6 +137,13 @@ class UserRouteTest {
 
     @Test
     void login() {
+        given()
+                .contentType("application/json")
+                .body("{\"username\": \"user_1\", \"password\": \"user_1\"}")
+                .when()
+                .post(BASE_URL + "/auth/login")
+                .then()
+                .statusCode(200);
 
     }
 
