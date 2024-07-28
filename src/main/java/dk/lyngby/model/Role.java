@@ -16,7 +16,8 @@ import java.util.Objects;
 @NamedQueries(@NamedQuery(name = "Role.deleteAllRows", query = "DELETE from Role"))
 @Getter
 @NoArgsConstructor
-public class Role implements Serializable {
+public class
+Role implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

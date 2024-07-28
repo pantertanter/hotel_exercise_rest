@@ -15,12 +15,12 @@ import java.util.List;
 public class Picture {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generate the ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     @Setter
-    @Column(name = "picture_alt", unique = false, nullable = false)
+    @Column(name = "picture_alt", nullable = false)
     private String alt;
 
     @Setter
@@ -50,8 +50,8 @@ public class Picture {
 
     @Setter
     @Getter
-    @OneToMany(mappedBy = "picture")
-    private List<Rating> ratings;
+    @OneToMany(mappedBy = "picture", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
 
     public Picture(String url, String alt, String pName, String pUserName, String pUserLink, String pDownLink) {
         this.url = url;
@@ -60,14 +60,10 @@ public class Picture {
         this.pUserName = pUserName;
         this.pUserLink = pUserLink;
         this.pDownLink = pDownLink;
-        this.ratings = new ArrayList<>(); // Initialize ratings list
     }
 
     public void addRating(Rating rating) {
-        if (ratings == null) {
-            ratings = new ArrayList<>(); // Initialize ratings list if null
-        }
         ratings.add(rating);
-        rating.setPicture(this); // Set the Picture instance in the Rating entity
+        rating.setPicture(this);
     }
 }
