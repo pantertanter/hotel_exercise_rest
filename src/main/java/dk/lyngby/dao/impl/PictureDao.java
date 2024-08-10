@@ -94,8 +94,6 @@ public class PictureDao implements IDao<Picture, Integer> {
         }
     }
 
-
-
     public boolean pictureExists(String alt, String userName) {
         try (var em = emf.createEntityManager()) {
             var query = em.createQuery("SELECT COUNT(p) FROM Picture p WHERE p.alt = :alt AND p.user.username = :userName", Long.class);
