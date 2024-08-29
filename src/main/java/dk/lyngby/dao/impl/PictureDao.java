@@ -1,64 +1,61 @@
 package dk.lyngby.dao.impl;
 
-import dk.lyngby.dto.HotelDto;
-import dk.lyngby.model.Hotel;
+import dk.lyngby.model.Picture;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
-public class HotelDao implements dk.lyngby.dao.IDao<Hotel, Integer> {
+public class PictureDao implements dk.lyngby.dao.IDao<Picture, Integer> {
 
-    private static HotelDao instance;
+    private static PictureDao instance;
     private static EntityManagerFactory emf;
 
-    public static HotelDao getInstance(EntityManagerFactory _emf) {
+    public static PictureDao getInstance(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
-            instance = new HotelDao();
+            instance = new PictureDao();
         }
         return instance;
     }
 
     @Override
-    public Hotel read(Integer integer) {
+    public Picture read(Integer integer) {
        try (var em = emf.createEntityManager())
        {
-           return em.find(Hotel.class, integer);
+           return em.find(Picture.class, integer);
        }
     }
 
     @Override
-    public List<Hotel> readAll() {
+    public List<Picture> readAll() {
         try (var em = emf.createEntityManager())
         {
-            var query = em.createQuery("SELECT h FROM Hotel h", Hotel.class);
+            var query = em.createQuery("SELECT p FROM Picture p", Picture.class);
             return query.getResultList();
         }
     }
 
     @Override
-    public Hotel create(Hotel hotel) {
+    public Picture create(Picture picture) {
         try (var em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            em.persist(hotel);
+            em.persist(picture);
             em.getTransaction().commit();
-            return hotel;
+            return picture;
         }
     }
 
     @Override
-    public Hotel update(Integer integer, Hotel hotel) {
+    public Picture update(Integer integer, Picture picture) {
         try(var em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
-            var h = em.find(Hotel.class, integer);
-            h.setHotelName(hotel.getHotelName());
-            h.setHotelAddress(hotel.getHotelAddress());
-            h.setHotelType(hotel.getHotelType());
-            Hotel merge = em.merge(h);
+            var p = em.find(Picture.class, integer);
+            p.setPictureUrl(picture.getPictureUrl());
+            Picture merge = em.merge(p);
             em.getTransaction().commit();
             return merge;
         }
@@ -68,8 +65,8 @@ public class HotelDao implements dk.lyngby.dao.IDao<Hotel, Integer> {
     public void delete(Integer integer) {
         try(var em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            var hotel = em.find(Hotel.class, integer);
-            em.remove(hotel);
+            var picture = em.find(Picture.class, integer);
+            em.remove(picture);
             em.getTransaction().commit();
         }
     }
@@ -77,7 +74,7 @@ public class HotelDao implements dk.lyngby.dao.IDao<Hotel, Integer> {
     @Override
     public boolean validatePrimaryKey(Integer integer) {
         try(var em = emf.createEntityManager()) {
-            var person = em.find(Hotel.class, integer);
+            var person = em.find(Picture.class, integer);
             return person != null;
         }
     }

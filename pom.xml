@@ -23,10 +23,10 @@
         <issuer>cphbusiness.dk</issuer>
         <token.expiration.time>3600000</token.expiration.time>
         <!--  DB    -->
-        <db.name>startcode</db.name>
-        <db.username>postgres</db.username>
-        <db.password>postgres</db.password>
-        <db.connection.string>jdbc:postgresql://localhost:5432/</db.connection.string>
+        <db.name>crawler</db.name>
+        <db.username>crawler</db.username>
+        <db.password>gYKchc21hx5RNUvX</db.password>
+        <db.connection.string>jdbc:postgresql://192.168.66.10:5432/</db.connection.string>
         <!--  Javalin    -->
         <javalin.port>7070</javalin.port>
     </properties>

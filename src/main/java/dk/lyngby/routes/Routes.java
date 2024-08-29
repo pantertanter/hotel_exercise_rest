@@ -7,14 +7,12 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Routes {
 
-    private final HotelRoute hotelRoute = new HotelRoute();
-    private final RoomRoute roomRoute = new RoomRoute();
+    private final PictureRoute pictureRoute = new PictureRoute();
 
     public EndpointGroup getRoutes(Javalin app) {
         return () -> {
             app.routes(() -> {
-                path("/", hotelRoute.getRoutes());
-                path("/", roomRoute.getRoutes());
+                path("/", pictureRoute.getRoutes());
             });
         };
     }
